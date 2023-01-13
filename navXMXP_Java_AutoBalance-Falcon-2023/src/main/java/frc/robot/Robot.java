@@ -12,11 +12,9 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
 /**
@@ -50,14 +48,12 @@ public class Robot extends TimedRobot {
     final static int rearRightChannel = 0;
 
     /* Master Talons for arcade drive */
-WPI_TalonFX _frontLeftMotor = new WPI_TalonFX(1, "rio");
-WPI_TalonFX _frontRightMotor = new WPI_TalonFX(2, "rio");
+WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(1);
+WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(2);
 
 /* Follower Talons + Victors for six motor drives */
-WPI_TalonFX _leftSlave1 = new WPI_TalonFX(5, "rio");
-WPI_TalonFX _rightSlave1 = new WPI_TalonFX(7, "rio");
-WPI_TalonFX _leftSlave2 = new WPI_TalonFX(4, "rio");
-WPI_TalonFX _rightSlave2 = new WPI_TalonFX(17, "rio");
+WPI_TalonSRX _backLeftMotor = new WPI_TalonSRX(5);
+WPI_TalonSRX _backRightMotor = new WPI_TalonSRX(7);
 
 /* Construct drivetrain by providing master motor controllers */
 DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMotor);
@@ -70,30 +66,20 @@ DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMot
      /* Factory Default all hardware to prevent unexpected behaviour */
      _frontLeftMotor.configFactoryDefault();
 _frontRightMotor.configFactoryDefault();
-_leftSlave1.configFactoryDefault();
-_leftSlave2.configFactoryDefault();
-_rightSlave1.configFactoryDefault();
-_rightSlave2.configFactoryDefault();
+_backLeftMotor.configFactoryDefault();
+_backRightMotor.configFactoryDefault();
 
-/**
- * Take our extra motor controllers and have them
- * follow the Talons updated in arcadeDrive 
- */
-_leftSlave1.follow(_frontLeftMotor);
-_leftSlave2.follow(_frontLeftMotor);
-_rightSlave1.follow(_frontRightMotor);
-_rightSlave2.follow(_frontRightMotor);
 
 /**
  * Drive robot forward and make sure all motors spin the correct way.
  * Toggle booleans accordingly.... 
  */
+ 
 _frontLeftMotor.setInverted(false); // <<<<<< Adjust this until robot drives forward when stick is forward
 _frontRightMotor.setInverted(true); // <<<<<< Adjust this until robot drives forward when stick is forward
-_leftSlave1.setInverted(InvertType.FollowMaster);
-_leftSlave2.setInverted(InvertType.FollowMaster);
-_rightSlave1.setInverted(InvertType.FollowMaster);
-_rightSlave2.setInverted(InvertType.FollowMaster);
+_backLeftMotor.setInverted(false);
+_backRightMotor.setInverted(true);
+
 /*
  * Talon FX does not need sensor phase set for its integrated sensor
  * This is because it will always be correct if the selected feedback device is integrated sensor (default value)
@@ -106,13 +92,13 @@ _rightSlave2.setInverted(InvertType.FollowMaster);
     }
     @Override
     public void robotInit() {
-        _frontLeftMotor = new Talon(frontLeftChannel);
+         /*(frontLeftMotor = new Talon(frontLeftChannel);
         _leftSlave1 = new Talon(rearLeftChannel);
         _frontRightMotor = new Talon(frontRightChannel);
         _rightSlave1 = new Talon(rearRightChannel);
-        myRobot = new MecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
-        myRobot.setExpiration(0.1);
-        stick = new Joystick(0);
+        _drive = new (_frontLeftMotor,_frontRightMotor);
+        _drive.setExpiration(0.1);
+        stick = new Joystick(0)*/
         try {
             /***********************************************************************
              * navX-MXP: - Communication via RoboRIO MXP (SPI, I2C) and USB. - See
@@ -206,8 +192,12 @@ _rightSlave2.setInverted(InvertType.FollowMaster);
         }
 
         try {
+
+
             //myRobot.driveCartesian(xAxisRate, yAxisRate, stick.getTwist(), 0); OG
-            myRobot.driveCartesian(xAxisRate, yAxisRate, stick.getTwist());
+            //_drive.driveCartesian(xAxisRate, yAxisRate, stick.getTwist());
+            // Arcade drive with a given forward and turn rate
+          _drive.arcadeDrive(-xAxisRate, yAxisRate);
         } catch (RuntimeException ex) {
             String err_string = "Drive system error:  " + ex.getMessage();
             DriverStation.reportError(err_string, true);
