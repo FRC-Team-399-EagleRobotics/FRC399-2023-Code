@@ -48,12 +48,12 @@ public class Robot extends TimedRobot {
     final static int rearRightChannel = 0;
 
     /* Master Talons for arcade drive */
-WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(1);
-WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(2);
+WPI_TalonSRX _frontLeftMotor = new WPI_TalonSRX(2);
+WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(3);
 
 /* Follower Talons + Victors for six motor drives */
-WPI_TalonSRX _backLeftMotor = new WPI_TalonSRX(5);
-WPI_TalonSRX _backRightMotor = new WPI_TalonSRX(7);
+WPI_TalonSRX _backLeftMotor = new WPI_TalonSRX(1);
+WPI_TalonSRX _backRightMotor = new WPI_TalonSRX(4);
 
 /* Construct drivetrain by providing master motor controllers */
 DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMotor);
@@ -63,42 +63,28 @@ DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMot
      */
 
     public void teleopInit() {
-     /* Factory Default all hardware to prevent unexpected behaviour */
-     _frontLeftMotor.configFactoryDefault();
-_frontRightMotor.configFactoryDefault();
-_backLeftMotor.configFactoryDefault();
-_backRightMotor.configFactoryDefault();
-
-
-/**
- * Drive robot forward and make sure all motors spin the correct way.
- * Toggle booleans accordingly.... 
- */
- 
-_frontLeftMotor.setInverted(false); // <<<<<< Adjust this until robot drives forward when stick is forward
-_frontRightMotor.setInverted(true); // <<<<<< Adjust this until robot drives forward when stick is forward
-_backLeftMotor.setInverted(false);
-_backRightMotor.setInverted(true);
-
-/*
- * Talon FX does not need sensor phase set for its integrated sensor
- * This is because it will always be correct if the selected feedback device is integrated sensor (default value)
- * and the user calls getSelectedSensor* to get the sensor's position/velocity.
- * 
- * https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase
- */
-// _frontLeftMotor.setSensorPhase(true);
-// _frontRightMotor.setSensorPhase(true);
+        stick = new Joystick(2);
     }
+
     @Override
     public void robotInit() {
-         /*(frontLeftMotor = new Talon(frontLeftChannel);
-        _leftSlave1 = new Talon(rearLeftChannel);
-        _frontRightMotor = new Talon(frontRightChannel);
-        _rightSlave1 = new Talon(rearRightChannel);
-        _drive = new (_frontLeftMotor,_frontRightMotor);
-        _drive.setExpiration(0.1);
-        stick = new Joystick(0)*/
+        /* Factory Default all hardware to prevent unexpected behaviour */
+     _frontLeftMotor.configFactoryDefault();
+     _frontRightMotor.configFactoryDefault();
+     _backLeftMotor.configFactoryDefault();
+     _backRightMotor.configFactoryDefault();
+     
+     
+     /**
+      * Drive robot forward and make sure all motors spin the correct way.
+      * Toggle booleans accordingly.... 
+      */
+      
+     _frontLeftMotor.setInverted(false); // <<<<<< Adjust this until robot drives forward when stick is forward
+     _frontRightMotor.setInverted(true); // <<<<<< Adjust this until robot drives forward when stick is forward
+     _backLeftMotor.setInverted(false);
+     _backRightMotor.setInverted(true);
+    
         try {
             /***********************************************************************
              * navX-MXP: - Communication via RoboRIO MXP (SPI, I2C) and USB. - See
@@ -177,7 +163,7 @@ _backRightMotor.setInverted(true);
         } else if (autoBalanceYMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
             autoBalanceYMode = false;
         }
-
+ 
         // Control drive system automatically,
         // driving in reverse direction of pitch/roll angle,
         // with a magnitude based upon the angle
