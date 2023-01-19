@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 
@@ -55,35 +57,29 @@ WPI_TalonSRX _frontRightMotor = new WPI_TalonSRX(3);
 WPI_TalonSRX _backLeftMotor = new WPI_TalonSRX(1);
 WPI_TalonSRX _backRightMotor = new WPI_TalonSRX(4);
 
+  // Bundling the motors
+  MotorControllerGroup leftMotors = new MotorControllerGroup(_frontLeftMotor, _backLeftMotor);
+  MotorControllerGroup rightMotors = new MotorControllerGroup(_frontRightMotor, _backRightMotor);
+
 /* Construct drivetrain by providing master motor controllers */
-DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMotor);
+DifferentialDrive _drive = new DifferentialDrive(leftMotors, rightMotors);
+
+
+static final double kOffBalanceAngleThresholdDegrees = 10;
+static final double kOonBalanceAngleThresholdDegrees = 5;
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
 
     public void teleopInit() {
-        stick = new Joystick(2);
-    }
-
-    @Override
-    public void robotInit() {
-        /* Factory Default all hardware to prevent unexpected behaviour */
-     _frontLeftMotor.configFactoryDefault();
-     _frontRightMotor.configFactoryDefault();
-     _backLeftMotor.configFactoryDefault();
-     _backRightMotor.configFactoryDefault();
+        stick = new Joystick(1);
      
      
      /**
       * Drive robot forward and make sure all motors spin the correct way.
       * Toggle booleans accordingly.... 
       */
-      
-     _frontLeftMotor.setInverted(false); // <<<<<< Adjust this until robot drives forward when stick is forward
-     _frontRightMotor.setInverted(true); // <<<<<< Adjust this until robot drives forward when stick is forward
-     _backLeftMotor.setInverted(false);
-     _backRightMotor.setInverted(true);
     
         try {
             /***********************************************************************
@@ -102,6 +98,11 @@ DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMot
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
         }
+    }
+
+    @Override
+    public void robotInit() {
+     
     }
 
     /**
@@ -139,9 +140,6 @@ DifferentialDrive _drive = new DifferentialDrive(_frontLeftMotor, _frontRightMot
     @Override
     public void autonomousPeriodic() {
     }
-
-    static final double kOffBalanceAngleThresholdDegrees = 10;
-    static final double kOonBalanceAngleThresholdDegrees = 5;
 
     /**
      * This function is called periodically during operator control.
