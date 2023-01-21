@@ -13,25 +13,12 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autonomous.AutonomousConveyor;
-import frc.robot.autonomous.AutonomousConveyor2;
-import frc.robot.autonomous.AutonomousConveyor3;
 import frc.robot.autonomous.AutonomousDrive;
 import frc.robot.autonomous.AutonomousDrive2;
-import frc.robot.autonomous.AutonomousIntake;
-import frc.robot.autonomous.AutonomousShooter;
-import frc.robot.autonomous.AutonomousShooter2;
 import frc.robot.autonomous.AutonomousVisionAim;
-import frc.robot.commands.ClimberCmd;
-import frc.robot.commands.ConveyorCmd;
-import frc.robot.commands.IntakeCmd;
-import frc.robot.commands.ShooterCmd;
 import frc.robot.commands.Tankdrive;
 import frc.robot.commands.VisionAimCommand;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -51,25 +38,6 @@ public class RobotContainer {
   public double stickL = RobotContainer.leftJoy.getRawAxis(1);
   public double stickR = RobotContainer.rightJoy.getRawAxis(1); 
 
-  //-----Intake------
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
-  // Command
-  private final IntakeCmd m_ExtendIntake = new IntakeCmd(m_intakeSubsystem, 0, false);
-  private final AutonomousIntake m_autoIntake = new AutonomousIntake(m_intakeSubsystem, 0, false, 0);
-
-  //-----Conveyor----
-  private final ConveyorSubsystem m_conveyorSubsystem = new ConveyorSubsystem();
-  //Commands
-  private final ConveyorCmd m_conveyorCmd = new ConveyorCmd(m_conveyorSubsystem, 0, 0);
-  private final AutonomousConveyor m_AutonomousConveyor = new AutonomousConveyor(m_conveyorSubsystem, 0, 0, 0);
-
-  //-----Shooter-----
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-  // Commands
-  private final ShooterCmd m_shooterCmd = new ShooterCmd(m_shooterSubsystem, 1, false);
-  private final AutonomousShooter m_AutonomousShooter = new AutonomousShooter(m_shooterSubsystem, 0, false, 0);
-  private final AutonomousShooter2 m_AutonomousShooter2 = new AutonomousShooter2(m_shooterSubsystem, 0, false, 0);
-
   //----Drivetrain-----
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final Tankdrive m_tankdrive = new Tankdrive(m_drivetrainSubsystem, 0, 0);
@@ -77,9 +45,6 @@ public class RobotContainer {
   private final AutonomousDrive2 m_autodrive2 = new AutonomousDrive2(m_drivetrainSubsystem, 0, 0, 0);
 
   //-----Climber------ 
-  private final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  //Commands
-  private final ClimberCmd m_climberCmd = new ClimberCmd(m_climberSubsystem, 0);
 
   //-----Limelight----
   private final Limelight m_limelightSubsystem = new Limelight();
@@ -105,10 +70,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_intakeSubsystem.setDefaultCommand(m_ExtendIntake);
-    m_conveyorSubsystem.setDefaultCommand(m_conveyorCmd);
-    m_shooterSubsystem.setDefaultCommand(m_shooterCmd);
-    m_climberSubsystem.setDefaultCommand(m_climberCmd);
     m_drivetrainSubsystem.setDefaultCommand(m_tankdrive);
 
 
@@ -166,7 +127,7 @@ public class RobotContainer {
 
     //Auton single high and intake enemy ball
     AutonomousDrive reverse = new AutonomousDrive(m_drivetrainSubsystem, -0.24, -0.25, 3);
-    AutonomousDrive2 turn = new AutonomousDrive2(m_drivetrainSubsystem, -0.25, 0.25, 1);
+    /*AutonomousDrive2 turn = new AutonomousDrive2(m_drivetrainSubsystem, -0.25, 0.25, 1);
     AutonomousDrive2 forward = new AutonomousDrive2(m_drivetrainSubsystem, -0.24, -0.25, 2);
     AutonomousDrive2 backFast = new AutonomousDrive2(m_drivetrainSubsystem, 0.75, 0.75, 0.5);
     AutonomousIntake autoIntake = new AutonomousIntake(m_intakeSubsystem, -1, true,  2); 
@@ -176,8 +137,9 @@ public class RobotContainer {
     AutonomousShooter2 autoRevShot = new AutonomousShooter2(m_shooterSubsystem, 0.7, true, 2);
     ParallelCommandGroup stageShot = new ParallelCommandGroup(autoRevShot, autoConveyor3);
     ParallelCommandGroup stageHigh = new ParallelCommandGroup(reverse, autoShooter, autoConveyor2);
-    ParallelCommandGroup IntakeBall = new ParallelCommandGroup(forward, autoIntake);
-    SequentialCommandGroup prank = new SequentialCommandGroup(stageHigh, stageShot, turn, IntakeBall, backFast);
+    ParallelCommandGroup IntakeBall = new ParallelCommandGroup(forward, autoIntake);*/
+    ParallelCommandGroup prank = new ParallelCommandGroup(reverse);
+    SequentialCommandGroup drive = new SequentialCommandGroup(prank);
     
 
     //Auton double high
@@ -202,7 +164,7 @@ public class RobotContainer {
     SequentialCommandGroup autonHighSingle = new SequentialCommandGroup(stageHigh, stageShot);*/
 
     
-    return prank; // Runs the commands
+    return drive; // Runs the commands
     
   }
 }
