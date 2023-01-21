@@ -37,7 +37,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  */
 
 public class Robot extends TimedRobot {
-
+//public final static Gyro navX = new AHRD(SPI.Port.kMXP); 
     AHRS ahrs;
     Joystick stick;
     boolean autoBalanceXMode;
@@ -81,23 +81,9 @@ static final double kOonBalanceAngleThresholdDegrees = 5;
       * Toggle booleans accordingly.... 
       */
     
-        try {
-            /***********************************************************************
-             * navX-MXP: - Communication via RoboRIO MXP (SPI, I2C) and USB. - See
-             * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
-             * 
-             * navX-Micro: - Communication via I2C (RoboRIO MXP or Onboard) and USB. - See
-             * http://navx-micro.kauailabs.com/guidance/selecting-an-interface.
-             * 
-             * VMX-pi: - Communication via USB. - See
-             * https://vmx-pi.kauailabs.com/installation/roborio-installation/
-             * 
-             * Multiple navX-model devices on a single robot are supported.
-             ************************************************************************/
-            ahrs = new AHRS(SPI.Port.kMXP);
-        } catch (RuntimeException ex) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
+
+        ahrs = new AHRS(SPI.Port.kMXP);
+        
     }
 
     @Override
@@ -146,46 +132,47 @@ static final double kOonBalanceAngleThresholdDegrees = 5;
      */
     @Override
     public void teleopPeriodic() {
-        double xAxisRate = stick.getX();
-        double yAxisRate = stick.getY();
-        double pitchAngleDegrees = ahrs.getPitch();
-        double rollAngleDegrees = ahrs.getRoll();
+        System.out.println("sadf");
+        // double xAxisRate = stick.getX();
+        // double yAxisRate = stick.getY();
+        // double pitchAngleDegrees = ahrs.getPitch();
+        // double rollAngleDegrees = ahrs.getRoll();
 
-        if (!autoBalanceXMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
-            autoBalanceXMode = true;
-        } else if (autoBalanceXMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
-            autoBalanceXMode = false;
-        }
-        if (!autoBalanceYMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
-            autoBalanceYMode = true;
-        } else if (autoBalanceYMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
-            autoBalanceYMode = false;
-        }
+        // if (!autoBalanceXMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
+        //     autoBalanceXMode = true;
+        // } else if (autoBalanceXMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
+        //     autoBalanceXMode = false;
+        // }
+        // if (!autoBalanceYMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
+        //     autoBalanceYMode = true;
+        // } else if (autoBalanceYMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
+        //     autoBalanceYMode = false;
+        // }
  
-        // Control drive system automatically,
-        // driving in reverse direction of pitch/roll angle,
-        // with a magnitude based upon the angle
+        // // Control drive system automatically,
+        // // driving in reverse direction of pitch/roll angle,
+        // // with a magnitude based upon the angle
 
-        if (autoBalanceXMode) {
-            double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
-            xAxisRate = Math.sin(pitchAngleRadians) * -1;
-        }
-        if (autoBalanceYMode) {
-            double rollAngleRadians = rollAngleDegrees * (Math.PI / 180.0);
-            yAxisRate = Math.sin(rollAngleRadians) * -1;
-        }
+        // if (autoBalanceXMode) {
+        //     double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
+        //     xAxisRate = Math.sin(pitchAngleRadians) * -1;
+        // }
+        // if (autoBalanceYMode) {
+        //     double rollAngleRadians = rollAngleDegrees * (Math.PI / 180.0);
+        //     yAxisRate = Math.sin(rollAngleRadians) * -1;
+        // }
 
-        try {
+        // try {
 
 
-            //myRobot.driveCartesian(xAxisRate, yAxisRate, stick.getTwist(), 0); OG
-            //_drive.driveCartesian(xAxisRate, yAxisRate, stick.getTwist());
-            // Arcade drive with a given forward and turn rate
-          _drive.arcadeDrive(-xAxisRate, yAxisRate);
-        } catch (RuntimeException ex) {
-            String err_string = "Drive system error:  " + ex.getMessage();
-            DriverStation.reportError(err_string, true);
-        }
+        //     //myRobot.driveCartesian(xAxisRate, yAxisRate, stick.getTwist(), 0); OG
+        //     //_drive.driveCartesian(xAxisRate, yAxisRate, stick.getTwist());
+        //     // Arcade drive with a given forward and turn rate
+        //   _drive.arcadeDrive(-xAxisRate, yAxisRate);
+        // } catch (RuntimeException ex) {
+        //     String err_string = "Drive system error:  " + ex.getMessage();
+        //     DriverStation.reportError(err_string, true);
+        // }
     }
 
     /**
