@@ -39,7 +39,7 @@ public class VisionAimCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double pX = 0.01, pY = 0.01;
+    double pX = 0.1, pY = 0.1;
 
     double x = limelight.getX() * pX;
     double y = limelight.getY() * pY;
