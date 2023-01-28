@@ -30,7 +30,7 @@ public class AutonomousVisionAim extends CommandBase{
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-      m_avision.setLight(true);
+      //m_avision.setLight(true);
       timer.reset();
       timer.start();
     }
@@ -60,7 +60,7 @@ public class AutonomousVisionAim extends CommandBase{
     @Override
     public void end(boolean interrupted)
     {
-        m_avision.setLight(false);
+        //m_avision.setLight(false);
         m_adrive2.setTank(0, 0);
     }
     // Returns true when the command should end.

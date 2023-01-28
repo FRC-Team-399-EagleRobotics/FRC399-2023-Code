@@ -33,13 +33,13 @@ public class VisionAimCommand extends CommandBase {
   @Override
   public void initialize() {
 
-    limelight.setLight(true);
+    //limelight.setLight(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double pX = 0.01, pY = 0.01;
+    double pX = 0.01, pY = -0.01;
 
     double x = limelight.getX() * pX;
     double y = limelight.getY() * pY;
@@ -54,7 +54,7 @@ public class VisionAimCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    limelight.setLight(true);
+    //limelight.setLight(true);
     m_tank.setTank(0, 0);
   }
 

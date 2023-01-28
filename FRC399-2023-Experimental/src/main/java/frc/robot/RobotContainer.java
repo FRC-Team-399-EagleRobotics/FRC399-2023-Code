@@ -22,6 +22,7 @@ import frc.robot.commands.Tankdrive;
 import frc.robot.commands.VisionAimCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Limelight;
+import edu.wpi.first.wpilibj.XboxController;
 
 
 /**
@@ -33,11 +34,11 @@ import frc.robot.subsystems.Limelight;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...\
 
-  public static Joystick leftJoy = new Joystick(1);
-  public static Joystick rightJoy = new Joystick(2);
+  public static Joystick driver = new Joystick(1);
+  //public static Joystick rightJoy = new Joystick(2);
   public static Joystick operator = new Joystick(0);
-  public double stickL = RobotContainer.leftJoy.getRawAxis(1);
-  public double stickR = RobotContainer.rightJoy.getRawAxis(1); 
+  public double stickL = RobotContainer.driver.getRawAxis(1);
+  public double stickR = RobotContainer.driver.getRawAxis(5); 
 
   //----Drivetrain-----
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
@@ -78,7 +79,7 @@ public class RobotContainer {
 
     //RepeatCommand vision = new RepeatCommand(new VisionAimCommand(m_drivetrainSubsystem, limelight));
 
-    new JoystickButton(operator, Constants.Controls.A_ID).whileTrue(new VisionAimCommand(m_drivetrainSubsystem, limelight));
+    new JoystickButton(driver, Constants.Controls.X_ID).whileTrue(new VisionAimCommand(m_drivetrainSubsystem, limelight));
 
   }
 

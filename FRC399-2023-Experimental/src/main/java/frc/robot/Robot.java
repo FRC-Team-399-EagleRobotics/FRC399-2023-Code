@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
     // CvSink cvSink = CameraServer.getVideo();
     // CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
     m_robotContainer = new RobotContainer();
-    m_robotContainer.limelight.setLight(true);
+    //m_robotContainer.limelight.setLight(true);
   }
 
   /**
