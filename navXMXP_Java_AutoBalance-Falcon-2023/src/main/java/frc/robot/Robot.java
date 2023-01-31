@@ -46,8 +46,8 @@ public class Robot extends TimedRobot {
     boolean autoBalanceXMode;
     boolean autoBalanceYMode;
 
-    static final double kOffBalanceAngleThresholdDegrees = 10;
-    static final double kOonBalanceAngleThresholdDegrees = 5;
+    static final double kOffBalanceAngleThresholdDegrees = 15;
+    static final double kOonBalanceAngleThresholdDegrees = 15;
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -146,17 +146,19 @@ public class Robot extends TimedRobot {
         double xAxisRate = stick.getX();
         double yAxisRate = stick.getY();
 
+
         //Old NavX method
         double pitchAngleDegrees = ahrs.getPitch();
         double rollAngleDegrees = ahrs.getRoll();
-        if (!autoBalanceXMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
+
+        if (!autoBalanceXMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees)||(Math.abs(pitchAngleDegrees)<=Math.abs(kOffBalanceAngleThresholdDegrees*-1)))) {
              autoBalanceXMode = true;
-         } else if (autoBalanceXMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
+         } else if (autoBalanceXMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees)&&(Math.abs(pitchAngleDegrees)>=Math.abs(kOffBalanceAngleThresholdDegrees*-1)))) {
              autoBalanceXMode = false;
          }
-         if (!autoBalanceYMode && (Math.abs(rollAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
+         if (!autoBalanceYMode && (Math.abs(rollAngleDegrees) >= Math.abs(kOonBalanceAngleThresholdDegrees)||(Math.abs(pitchAngleDegrees)<=Math.abs(kOonBalanceAngleThresholdDegrees*-1)))) {
              autoBalanceYMode = true;
-         } else if (autoBalanceYMode && (Math.abs(rollAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
+         } else if (autoBalanceYMode && (Math.abs(rollAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))&&(Math.abs(pitchAngleDegrees)>=Math.abs(kOonBalanceAngleThresholdDegrees*-1))) {
              autoBalanceYMode = false;
          }
  
@@ -165,11 +167,11 @@ public class Robot extends TimedRobot {
          // with a magnitude based upon the angle
 
         if (autoBalanceXMode) {
-             double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
+             double pitchAngleRadians = (pitchAngleDegrees) * (Math.PI / 180.0)*2;
              xAxisRate = Math.sin(pitchAngleRadians) * -1;
          }
          if (autoBalanceYMode) {
-             double rollAngleRadians = rollAngleDegrees * (Math.PI / 180.0);
+             double rollAngleRadians = (rollAngleDegrees) * (Math.PI / 180.0)*2;
              yAxisRate = Math.sin(rollAngleRadians) * -1;
          }
 
