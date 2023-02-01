@@ -23,6 +23,7 @@ import frc.robot.commands.VisionAimCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.BalanceCommand;
 
 
 /**
@@ -46,6 +47,8 @@ public class RobotContainer {
   private final AutonomousDrive m_autodrive = new AutonomousDrive(m_drivetrainSubsystem, 0, 0, 0);
   private final AutonomousDrive2 m_autodrive2 = new AutonomousDrive2(m_drivetrainSubsystem, 0, 0, 0);
 
+  //--NavX----
+  private final BalanceCommand m_balance = new BalanceCommand(m_drivetrainSubsystem, null);
   //-----Climber------ 
 
   //-----Limelight----
@@ -80,7 +83,7 @@ public class RobotContainer {
     //RepeatCommand vision = new RepeatCommand(new VisionAimCommand(m_drivetrainSubsystem, limelight));
 
     new JoystickButton(driver, Constants.Controls.X_ID).whileTrue(new VisionAimCommand(m_drivetrainSubsystem, limelight));
-
+    new JoystickButton(driver, Constants.Controls.B_ID).whileTrue(new BalanceCommand(m_drivetrainSubsystem, null));
   }
 
   /**
