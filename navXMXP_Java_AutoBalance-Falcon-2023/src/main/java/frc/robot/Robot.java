@@ -46,8 +46,8 @@ public class Robot extends TimedRobot {
     boolean autoBalanceXMode;
     boolean autoBalanceYMode;
 
-    static final double kOffBalanceAngleThresholdDegrees = 15;
-    static final double kOonBalanceAngleThresholdDegrees = 15;
+    static final double kOffBalanceAngleThresholdDegrees = 5;
+    static final double kOonBalanceAngleThresholdDegrees = 5;
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.

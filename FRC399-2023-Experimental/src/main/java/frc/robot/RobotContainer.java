@@ -34,11 +34,12 @@ import edu.wpi.first.wpilibj.XboxController;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...\
 
-  public static Joystick driver = new Joystick(1);
-  //public static Joystick rightJoy = new Joystick(2);
+  //public static Joystick driver = new Joystick(1);
   public static Joystick operator = new Joystick(0);
-  public double stickL = RobotContainer.driver.getRawAxis(1);
-  public double stickR = RobotContainer.driver.getRawAxis(5); 
+  public static Joystick rightJoy = new Joystick(1);
+  public static Joystick leftJoy = new Joystick(2);
+  //public double stickL = RobotContainer.driver.getRawAxis(1);
+  //public double stickR = RobotContainer.driver.getRawAxis(5); 
 
   //----Drivetrain-----
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
@@ -79,7 +80,7 @@ public class RobotContainer {
 
     //RepeatCommand vision = new RepeatCommand(new VisionAimCommand(m_drivetrainSubsystem, limelight));
 
-    new JoystickButton(driver, Constants.Controls.X_ID).whileTrue(new VisionAimCommand(m_drivetrainSubsystem, limelight));
+    new JoystickButton(operator, Constants.Controls.X_ID).whileTrue(new VisionAimCommand(m_drivetrainSubsystem, limelight));
 
   }
 

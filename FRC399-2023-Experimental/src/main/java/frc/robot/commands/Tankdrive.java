@@ -36,7 +36,7 @@ public class Tankdrive extends CommandBase {
   @Override
   public void execute() {
     // Is this a good place to call it? Or should I put it in robotcontainer
-    double stickL = RobotContainer.driver.getRawAxis(1);
+    /*double stickL = RobotContainer.driver.getRawAxis(1);
     double stickR = RobotContainer.driver.getRawAxis(5);
 
     if(Math.abs(stickL) < 0.15) {
@@ -53,7 +53,12 @@ public class Tankdrive extends CommandBase {
     double steering = RobotContainer.driver.getRawAxis(0);
     steering *= steering * steering;
     
-    m_tank.setTank(throttle + steering, throttle - steering);
+    m_tank.setTank(throttle + steering, throttle - steering);*/
+
+    double stickL = RobotContainer.leftJoy.getRawAxis(1);
+    double stickR = RobotContainer.rightJoy.getRawAxis(1);
+
+    m_tank.setTank(stickL, stickR);
   } 
 
   // Called once the command ends or is interrupted.
