@@ -1,5 +1,4 @@
 package frc.robot.commands;
-import frc.robot.subsystems.Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
