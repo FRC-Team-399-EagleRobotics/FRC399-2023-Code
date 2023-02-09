@@ -26,7 +26,6 @@ import frc.robot.Constants.Drivetrain;
 public class DrivetrainSubsystem extends SubsystemBase {
   // Wait I think this is wrong. FX are the new motors on the top and SRX are the old one on the bottom
   private TalonSRX leftDriveCim1, leftDriveCim2, rightDriveCim1, rightDriveCim2;
-  private AHRS navx;
 
  /* private Encoder leftEncoder = new Encoder(//
             Constants.Drivetrain.LeftDriveCim1EnC_A, Constants.Drivetrain.LeftDriveCim1EnC_B);
@@ -72,10 +71,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightDriveCim1.set(ControlMode.PercentOutput, 1.0);
     //rightDriveFalcon.set(ControlMode.PercentOutput, 1.0);
     rightDriveCim2.set(ControlMode.PercentOutput, 1.0);
-
-    // BEGIN NAVX INIT AND CALIBRATION
-    navx = new AHRS(SPI.Port.kMXP);
-    navx.reset();
   }
 
   //public double getEncoderMeters() {
@@ -97,22 +92,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightDriveCim1.set(ControlMode.PercentOutput, r);
     //rightDriveFalcon.set(ControlMode.PercentOutput, -r);
     rightDriveCim2.set(ControlMode.PercentOutput, r);
-  }
-
-    /**
-   * Gets the current yaw angle relative to the last reset.
-   * @return
-   */
-  public double getYaw() {
-    return 0;//navx.getAngle();
-  }
-
-    /**
-   * Gets the yaw rate, or how quickly the robot is turning.
-   * @return
-   */
-  public double getYawRate() {
-    return 0;//navx.getRate();
   }
   
   @Override

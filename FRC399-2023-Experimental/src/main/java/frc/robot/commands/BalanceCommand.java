@@ -1,18 +1,17 @@
 package frc.robot.commands;
-
+import frc.robot.subsystems.Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.Constants;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
 
 /** An example command that uses an example subsystem. */
 public class BalanceCommand extends CommandBase {
  private DrivetrainSubsystem m_tank;
- 
- AHRS ahrs;
+ double pitchAngleDegrees = Gyro.;
+double rollAngleDegrees = Gyro.getRoll();
+
  boolean autoBalanceXMode;
  boolean autoBalanceYMode;
 
@@ -22,8 +21,7 @@ public class BalanceCommand extends CommandBase {
  static final double kOffBalanceAngleThresholdDegrees = 15;
  static final double kOonBalanceAngleThresholdDegrees = 15;
 
- public BalanceCommand(DrivetrainSubsystem m_tank, AHRS ahrs) {
-    this.ahrs = ahrs;
+ public BalanceCommand(DrivetrainSubsystem m_tank) {
     this.m_tank = m_tank;
     addRequirements(m_tank);
   }
@@ -31,45 +29,12 @@ public class BalanceCommand extends CommandBase {
  // Called when the command is initially scheduled.
  @Override
  public void initialize() {
-    try {
-        /***********************************************************************
-         * navX-MXP: - Communication via RoboRIO MXP (SPI, I2C) and USB. - See
-         * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
-         * 
-         * navX-Micro: - Communication via I2C (RoboRIO MXP or Onboard) and USB. - See
-         * http://navx-micro.kauailabs.com/guidance/selecting-an-interface.
-         * 
-         * VMX-pi: - Communication via USB. - See
-         * https://vmx-pi.kauailabs.com/installation/roborio-installation/
-         * 
-         * Multiple navX-model devices on a single robot are supported.
-         ************************************************************************/
-        //WPILIB Gyro method
-        //gyro = new AHRS(SPI.Port.kMXP);
-        //gyro.reset();
-        //gyro.calibrate();
-
-        
-        // Old NavX method
-        ahrs = new AHRS(SPI.Port.kMXP);
-
-        //Extra?
-        ahrs.reset();
-        ahrs.calibrate();
-        
-
-
-    } catch (RuntimeException ex) {
-        DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-    }
+    
  } 
 
  // Called every time the scheduler runs while the command is scheduled.
  @Override
  public void execute() {
-    //Old NavX method
-    double pitchAngleDegrees = ahrs.getPitch();
-    double rollAngleDegrees = ahrs.getRoll();
 
     if (!autoBalanceXMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees)||(Math.abs(pitchAngleDegrees)<=Math.abs(kOffBalanceAngleThresholdDegrees*-1)))) {
          autoBalanceXMode = true;
