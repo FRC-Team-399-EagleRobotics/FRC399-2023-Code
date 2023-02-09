@@ -11,19 +11,21 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Drivetrain;
+
+// NavX aka gyro
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 // must create + complete drive commands to implement 
 
 // import frc.robot.commands.TeleopDriveCommand;
 
 public class DrivetrainSubsystem extends SubsystemBase {
+  AHRS gyro;
   // Wait I think this is wrong. FX are the new motors on the top and SRX are the old one on the bottom
   private TalonSRX leftDriveCim1, leftDriveCim2, rightDriveCim1, rightDriveCim2;
 
@@ -71,6 +73,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightDriveCim1.set(ControlMode.PercentOutput, 1.0);
     //rightDriveFalcon.set(ControlMode.PercentOutput, 1.0);
     rightDriveCim2.set(ControlMode.PercentOutput, 1.0);
+
+    // BEGIN NAVX INIT AND CALIBRATION
+    gyro = new AHRS(SPI.Port.kMXP);
+    gyro.reset();
+
   }
 
   //public double getEncoderMeters() {
@@ -99,6 +106,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // TODO: implement tank drive logic here!
   }
+
+  //Start of NavX(gyro) commands
+  public void resetGyro(){   
+    gyro.reset();
+  }
+
+  public double getRoll() {
+   double rollAngleDegrees = gyro.getRoll();
+   return rollAngleDegrees;
+  }
+
+  public double getPitch() {
+     double pitchAngleDegrees = gyro.getPitch();
+     return pitchAngleDegrees;
+  }
+
+  //END of NavX(gyro) commands
 
   public TalonFX init(int id) {
     TalonFX tFX = new TalonFX(id);

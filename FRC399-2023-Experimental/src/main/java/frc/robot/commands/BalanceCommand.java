@@ -9,8 +9,6 @@ import frc.robot.Constants;
 /** An example command that uses an example subsystem. */
 public class BalanceCommand extends CommandBase {
  private DrivetrainSubsystem m_tank;
- double pitchAngleDegrees = Gyro.;
-double rollAngleDegrees = Gyro.getRoll();
 
  boolean autoBalanceXMode;
  boolean autoBalanceYMode;
@@ -35,7 +33,10 @@ double rollAngleDegrees = Gyro.getRoll();
  // Called every time the scheduler runs while the command is scheduled.
  @Override
  public void execute() {
-
+  // Gets NavX variables from drivetrain subsystem
+   double pitchAngleDegrees = m_tank.getPitch();
+   double rollAngleDegrees = m_tank.getRoll();
+   
     if (!autoBalanceXMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees)||(Math.abs(pitchAngleDegrees)<=Math.abs(kOffBalanceAngleThresholdDegrees*-1)))) {
          autoBalanceXMode = true;
      } else if (autoBalanceXMode && (Math.abs(pitchAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees)&&(Math.abs(pitchAngleDegrees)>=Math.abs(kOffBalanceAngleThresholdDegrees*-1)))) {
