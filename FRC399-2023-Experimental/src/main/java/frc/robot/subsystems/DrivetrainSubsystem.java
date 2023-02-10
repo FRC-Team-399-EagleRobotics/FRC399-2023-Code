@@ -100,6 +100,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //rightDriveFalcon.set(ControlMode.PercentOutput, -r);
     rightDriveCim2.set(ControlMode.PercentOutput, r);
   }
+
   
   @Override
   public void periodic() {

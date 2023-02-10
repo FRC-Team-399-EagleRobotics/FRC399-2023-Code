@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
      /* Construct drivetrain by providing master motor controllers */
      _drive = new DifferentialDrive(leftMotors, rightMotors);
 
-     stick = new Joystick(1);
+     stick = new Joystick(0);
       try {
         /***********************************************************************
          * navX-MXP: - Communication via RoboRIO MXP (SPI, I2C) and USB. - See
@@ -175,41 +175,19 @@ public class Robot extends TimedRobot {
              yAxisRate = Math.sin(rollAngleRadians) * -1;
          }
 
-         /*
-                 //FRC Gryo method
-        double rateAngleDegrees = gyro.getRate();
-        double angleAngleDegrees = gyro.getAngle();
-        if (!autoBalanceXMode && (Math.abs(rateAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
-            autoBalanceXMode = true;
-        } else if (autoBalanceXMode && (Math.abs(rateAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
-            autoBalanceXMode = false;
-        }
-        if (!autoBalanceYMode && (Math.abs(rateAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees))) {
-            autoBalanceYMode = true;
-        } else if (autoBalanceYMode && (Math.abs(rateAngleDegrees) <= Math.abs(kOonBalanceAngleThresholdDegrees))) {
-            autoBalanceYMode = false;
-        }
-
-        // Control drive system automatically,
-        // driving in reverse direction of pitch/roll angle,
-        // with a magnitude based upon the angle
-
-        if (autoBalanceXMode) {
-            double pitchAngleRadians = rateAngleDegrees * (Math.PI / 180.0);
-            xAxisRate = Math.sin(pitchAngleRadians) * -1;
-        }
-        if (autoBalanceYMode) {
-            double rollAngleRadians = angleAngleDegrees * (Math.PI / 180.0);
-            yAxisRate = Math.sin(rollAngleRadians) * -1;
-        }
-*/
+    
         //Run drivetrain
          try {
             /* 
              myRobot.driveCartesian(xAxisRate, yAxisRate, stick.getTwist(), 0); OG
              _drive.driveCartesian(xAxisRate, yAxisRate, stick.getTwist());
              Arcade drive with a given forward and turn rate */
+             //yAxisRate = stick.getRawAxis(1);
+             //xAxisRate = stick.getRawAxis(2); 
+             System.out.println("Y axis: "+ yAxisRate);
+             System.out.println("X axis: "+ xAxisRate);
            _drive.arcadeDrive(yAxisRate, xAxisRate);
+           //_drive.tankDrive(pitchAngleDegrees, rollAngleDegrees);
          } catch (RuntimeException ex) {
              String err_string = "Drive system error:  " + ex.getMessage();
              DriverStation.reportError(err_string, true);

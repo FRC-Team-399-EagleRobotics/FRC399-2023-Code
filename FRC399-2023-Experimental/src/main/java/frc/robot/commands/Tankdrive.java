@@ -55,8 +55,8 @@ public class Tankdrive extends CommandBase {
     
     m_tank.setTank(throttle + steering, throttle - steering);*/
 
-    double stickL = RobotContainer.leftJoy.getRawAxis(1);
-    double stickR = RobotContainer.rightJoy.getRawAxis(1);
+    double stickL = RobotContainer.operator.getRawAxis(1);
+    double stickR = RobotContainer.operator.getRawAxis(3);
 
     m_tank.setTank(stickL, stickR);
   } 

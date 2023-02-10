@@ -26,7 +26,7 @@ public class BalanceCommand extends CommandBase {
  // Called when the command is initially scheduled.
  @Override
  public void initialize() {
-    
+    m_tank.resetGyro();
  } 
 
  // Called every time the scheduler runs while the command is scheduled.
@@ -63,7 +63,7 @@ public class BalanceCommand extends CommandBase {
     //Run drivetrain
      try {
          //Arcade drive with a given forward and turn rate */
-       m_tank.setTank(yAxisRate, xAxisRate);
+       m_tank.setTank(yAxisRate, yAxisRate);
      } catch (RuntimeException ex) {
          String err_string = "Drive system error:  " + ex.getMessage();
          DriverStation.reportError(err_string, true);
