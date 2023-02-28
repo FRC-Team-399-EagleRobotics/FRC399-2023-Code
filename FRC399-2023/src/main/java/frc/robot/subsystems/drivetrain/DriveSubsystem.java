@@ -248,4 +248,19 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+ //Start of NavX(gyro) balance commands
+
+ public double getRoll() {
+  double rollAngleDegrees = m_gyro.getRoll();
+  return rollAngleDegrees;
+ }
+
+ public double getPitch() {
+   double pitchAngleDegrees = m_gyro.getPitch();
+   return pitchAngleDegrees;
+ }
+
+//END of NavX(gyro) balance commands
+
 }

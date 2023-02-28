@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.GripperCommand;
 import frc.robot.constants.swerveConstants.AutoConstants;
 import frc.robot.constants.swerveConstants.DriveConstants;
@@ -56,6 +57,9 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final SwerveCommand m_swerve = new SwerveCommand(m_robotDrive);
+
+  // NavX(gyro)
+  private final BalanceCommand m_balance = new BalanceCommand(m_robotDrive);
 
   // The driver's controller
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
