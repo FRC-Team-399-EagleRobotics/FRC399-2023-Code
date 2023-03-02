@@ -7,11 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.GripperCommand;
 import frc.robot.constants.swerveConstants.AutoConstants;
 import frc.robot.constants.swerveConstants.DriveConstants;
 import frc.robot.constants.swerveConstants.OIConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.SwerveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,11 +51,18 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final GripperSubsystem m_exampleSubsystem = new GripperSubsystem();
 
-  private final GripperCommand m_autoCommand = new GripperCommand(m_exampleSubsystem);
+  // Gripper 
+  private final GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
 
-  // The robot's subsystems
+  private final GripperCommand m_autoGripperCommand = new GripperCommand(m_GripperSubsystem);
+
+  // Arm 
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+
+  private final ArmCommand m_autoArmCommand = new ArmCommand(m_ArmSubsystem);
+
+  // The Swerve subsystem
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final SwerveCommand m_swerve = new SwerveCommand(m_robotDrive);
