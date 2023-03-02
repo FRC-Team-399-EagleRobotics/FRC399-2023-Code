@@ -17,7 +17,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.SwerveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,9 +25,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -53,14 +49,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // Gripper 
-  private final GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
+  //private final GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
 
-  private final GripperCommand m_autoGripperCommand = new GripperCommand(m_GripperSubsystem);
+  //private final GripperCommand m_autoGripperCommand = new GripperCommand(m_GripperSubsystem);
 
   // Arm 
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
 
-  private final ArmCommand m_autoArmCommand = new ArmCommand(m_ArmSubsystem);
+  private final ArmCommand m_armCommand = new ArmCommand(m_ArmSubsystem);
 
   // The Swerve subsystem
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -85,6 +81,7 @@ public class RobotContainer {
 
         // Configure default commands
         m_robotDrive.setDefaultCommand(m_swerve);
+        //m_robotDrive.setDefaultCommand(m_armCommand);
           // The left stick controls translation of the robot.
           // Turning is controlled by the X axis of the right stick.
           /*new RunCommand(
