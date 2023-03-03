@@ -37,19 +37,18 @@ public class GripperSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
- public void grab() {
+ public void grab(double i) {
+  iPwr = i;
+  gripperMotor1.set(ControlMode.PercentOutput, -i);
+  gripperMotor2.set(ControlMode.PercentOutput, i);
     setPos(true);
   }
 
-  public void endGrab() {
-    setPwr(0);
-    setPos(false);
-  }
-
-  public void setPwr(double i) {
+  public void endGrab(double i) {
     iPwr = i;
     gripperMotor1.set(ControlMode.PercentOutput, i);
-    gripperMotor2.set(ControlMode.PercentOutput, i);
+    gripperMotor2.set(ControlMode.PercentOutput, -i);
+    setPos(false);
   }
 
   public void setPos(boolean p) {

@@ -1,13 +1,13 @@
 package frc.robot.commands;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.Constants;
+import frc.robot.subsystems.drivetrain.DriveSubsystem;
+import frc.robot.constants.swerveConstants.OIConstants;
 
 /** An example command that uses an example subsystem. */
 public class BalanceCommand extends CommandBase {
- private DrivetrainSubsystem m_tank;
+ private DriveSubsystem m_swerve;
 
  boolean autoBalanceXMode;
  boolean autoBalanceYMode;
@@ -18,23 +18,23 @@ public class BalanceCommand extends CommandBase {
  static final double kOffBalanceAngleThresholdDegrees = 15;
  static final double kOonBalanceAngleThresholdDegrees = 15;
 
- public BalanceCommand(DrivetrainSubsystem m_tank) {
-    this.m_tank = m_tank;
-    addRequirements(m_tank);
+ public BalanceCommand(DriveSubsystem m_swerve) {
+    this.m_swerve = m_swerve;
+    addRequirements(m_swerve);
   }
 
  // Called when the command is initially scheduled.
  @Override
  public void initialize() {
-    m_tank.resetGyro();
+  m_swerve.zeroHeading();
  } 
 
  // Called every time the scheduler runs while the command is scheduled.
  @Override
  public void execute() {
   // Gets NavX variables from drivetrain subsystem
-   double pitchAngleDegrees = m_tank.getPitch();
-   double rollAngleDegrees = m_tank.getRoll();
+   double pitchAngleDegrees = m_swerve.getPitch();
+   double rollAngleDegrees = m_swerve.getRoll();
    
     if (!autoBalanceXMode && (Math.abs(pitchAngleDegrees) >= Math.abs(kOffBalanceAngleThresholdDegrees)||(Math.abs(pitchAngleDegrees)<=Math.abs(kOffBalanceAngleThresholdDegrees*-1)))) {
          autoBalanceXMode = true;
@@ -60,21 +60,24 @@ public class BalanceCommand extends CommandBase {
          yAxisRate = Math.sin(rollAngleRadians) * -1;
      }
 
-    //Run drivetrain
+    //Run swerve drive
      try {
-         //Arcade drive with a given forward and turn rate */
-       m_tank.setTank(yAxisRate, yAxisRate);
+         m_swerve.drive(
+          -MathUtil.applyDeadband(yAxisRate, OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(xAxisRate, OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
+          true, true);
      } catch (RuntimeException ex) {
          String err_string = "Drive system error:  " + ex.getMessage();
          DriverStation.reportError(err_string, true);
      }
  }
 
- // Called once the command ends or is interrupted.
- @Override
- public void end(boolean interrupted) {
-   m_tank.setTank(0, 0);
- }
+   // Called once the command ends or is interrupted.
+   @Override
+   public void end(boolean interrupted) {
+    
+   }
    // Returns true when the command should end.
    @Override
    public boolean isFinished() {

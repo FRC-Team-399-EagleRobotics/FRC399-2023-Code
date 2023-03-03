@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
-import frc.robot.commands.GripperCommand;
+import frc.robot.commands.ClawCommand;
 import frc.robot.constants.swerveConstants.AutoConstants;
 import frc.robot.constants.swerveConstants.DriveConstants;
 import frc.robot.constants.swerveConstants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.commands.SwerveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.PIDController;
@@ -48,16 +48,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  // Gripper 
-  private final GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
-
-  private final GripperCommand m_gripperCommand = new GripperCommand(m_GripperSubsystem, 0, false);
-
-  // Arm 
-  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-
-  private final ArmCommand m_armCommand = new ArmCommand(m_ArmSubsystem, 0);
-
   // The Swerve subsystem
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
@@ -65,6 +55,11 @@ public class RobotContainer {
 
   // NavX(gyro)
   private final BalanceCommand m_balance = new BalanceCommand(m_robotDrive);
+
+  // Claw 
+  private final ClawSubsystem m_claw = new ClawSubsystem();
+
+  private final ClawCommand m_clawCommand = new ClawCommand(m_claw);
 
   // The driver's controller
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -96,7 +91,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    m_robotDrive.setDefaultCommand(m_gripperCommand);
+    //m_robotDrive.setDefaultCommand(m_balance);
+    m_robotDrive.setDefaultCommand(m_clawCommand);
 
   }
 

@@ -2,7 +2,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 import frc.robot.constants.swerveConstants.OIConstants;
 
@@ -66,7 +65,7 @@ public class BalanceCommand extends CommandBase {
          m_swerve.drive(
           -MathUtil.applyDeadband(yAxisRate, OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(xAxisRate, OIConstants.kDriveDeadband),
-          -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(2), OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
           true, true);
      } catch (RuntimeException ex) {
          String err_string = "Drive system error:  " + ex.getMessage();
