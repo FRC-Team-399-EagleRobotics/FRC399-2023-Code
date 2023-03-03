@@ -34,15 +34,17 @@ public class ArmCommand extends CommandBase {
   // Called every time th scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (RobotContainer.m_driver.getRawButton(Button.kR2.value)) {
+    // Change button to the correct one.
+    if (RobotContainer.m_driver.getRawButton(2)) {
     m_arm.setPosition(180);
-    System.out.println("Running");
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_arm.rest();
+  }
 
   // Returns true when the command should end.
   @Override

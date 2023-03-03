@@ -48,11 +48,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  // Claw 
-  private final ClawSubsystem m_ClawSubsystem = new ClawSubsystem();
-
-  private final ClawCommand m_ClawCommand = new ClawCommand(m_ClawSubsystem);
-
   // Arm 
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
 
@@ -110,7 +105,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     m_robotDrive.setDefaultCommand(m_balance);
-    m_ClawSubsystem.setDefaultCommand(m_ClawCommand);
+    m_claw.setDefaultCommand(m_clawCommand);
     m_ArmSubsystem.setDefaultCommand(m_armCommand);
 
 

@@ -27,8 +27,8 @@ public class ClawSubsystem extends SubsystemBase {
     ClawMotor1 = new TalonSRX(Claw.clawMotor1_ID);
     ClawMotor2 = new TalonSRX(Claw.clawMotor2_ID);
 
-    //wristSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.wristSolenoid_ID);
-    //ClawSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.clawSolenoid_ID);
+    wristSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.wristSolenoid_ID);
+    ClawSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.clawSolenoid_ID);
 
   }
 
@@ -36,28 +36,33 @@ public class ClawSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
-/* 
+
  public void grab() {
+    // Activate pistons
     setPos(true);
+
+    // Activate motors for a certain time then stop to not squish the object
+    if (m_timer.get() < 1) {
+    setPwr(.1);
+    }
   }
 
   public void endGrab() {
     setPwr(0);
     setPos(false);
   }
-*/
+
   public void setPwr(double i) {
     iPwr = i;
     ClawMotor1.set(ControlMode.PercentOutput, i);
     ClawMotor2.set(ControlMode.PercentOutput, i);
   }
-/* 
+
   public void setPos(boolean p) {
     iPos = p;
     wristSolenoid.set(p);
-    //ClawSolenoid.set(p);
+    ClawSolenoid.set(p);
   }
-  */
 
   @Override
   public void simulationPeriodic() {
