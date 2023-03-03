@@ -48,6 +48,16 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
+  // Claw 
+  private final ClawSubsystem m_ClawSubsystem = new ClawSubsystem();
+
+  private final ClawCommand m_ClawCommand = new ClawCommand(m_ClawSubsystem);
+
+  // Arm 
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+
+  private final ArmCommand m_armCommand = new ArmCommand(m_ArmSubsystem);
+
   // The Swerve subsystem
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
@@ -76,8 +86,16 @@ public class RobotContainer {
 
         // Configure default commands
         m_robotDrive.setDefaultCommand(m_swerve);
-
-
+        //m_robotDrive.setDefaultCommand(m_armCommand);
+          // The left stick controls translation of the robot.
+          // Turning is controlled by the X axis of the right stick.
+          /*new RunCommand(
+              () -> m_robotDrive.drive(
+                  -MathUtil.applyDeadband(m_driver.getRawAxis(1), frc.robot.constants.swerveConstants.OIConstants.kDriveDeadband),
+                  -MathUtil.applyDeadband(m_driver.getRawAxis(0), frc.robot.constants.swerveConstants.OIConstants.kDriveDeadband),
+                  -MathUtil.applyDeadband(m_driver.getRawAxis(2), frc.robot.constants.swerveConstants.OIConstants.kDriveDeadband),
+                  true, true),
+                  m_robotDrive));*/
   }
 
   /**
@@ -91,8 +109,17 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    //m_robotDrive.setDefaultCommand(m_balance);
-    m_robotDrive.setDefaultCommand(m_clawCommand);
+    m_robotDrive.setDefaultCommand(m_balance);
+    m_ClawSubsystem.setDefaultCommand(m_ClawCommand);
+    m_ArmSubsystem.setDefaultCommand(m_armCommand);
+
+
+
+    //m_robotDrive.setDefaultCommand(m_swerve);
+    /*new JoystickButton(m_driver, Button.kR1.value)
+    .whileTrue(new RunCommand(
+        () -> m_robotDrive.setX(),
+        m_robotDrive));*/
 
   }
 

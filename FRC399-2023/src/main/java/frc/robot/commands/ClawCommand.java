@@ -16,13 +16,11 @@ public class ClawCommand extends CommandBase {
  // Called when the command is initially scheduled.
  @Override
  public void initialize() {
-    m_claw.exampleCondition();
  }
 
  // Called every time the scheduler runs while the command is scheduled.
  @Override
  public void execute() {
-    m_claw.exampleCondition();
  }
 
  // Called once the command ends or is interrupted.
