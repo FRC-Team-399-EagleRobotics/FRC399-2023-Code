@@ -8,38 +8,32 @@ import frc.robot.constants.Constants.Arm;
 
 
 public class ArmSubsystem extends SubsystemBase {
-    private final TalonFX ArmMotor1, ArmMotor2;
+    private final TalonFX armMotor1, armMotor2;
     private final double encoderTicksPerDegree;
 
+    // Variables to store state of arm
+    double degree = 0;
+
     public ArmSubsystem() {
-        ArmMotor1 = new TalonFX(Arm.ArmMotor1_ID);
-        ArmMotor2 = new TalonFX(Arm.ArmMotor2_ID);
+        armMotor1 = new TalonFX(Arm.armMotor1_ID);
+        armMotor2 = new TalonFX(Arm.armMotor2_ID);
 
         this.encoderTicksPerDegree = 227.56;
         
         // Configure the Talon FX for position control
-        ArmMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-        ArmMotor1.setSensorPhase(false);
-        ArmMotor1.setInverted(false);
-        ArmMotor1.config_kF(0, 0);
-        ArmMotor1.config_kP(0, 0.1);
-        ArmMotor1.config_kI(0, 0);
-        ArmMotor1.config_kD(0, 0);
-        ArmMotor1.config_IntegralZone(0, 0);
-        ArmMotor1.configClosedLoopPeakOutput(0, 1);
-        ArmMotor1.configAllowableClosedloopError(0, 0);
+        armMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+        armMotor1.setSensorPhase(false);
+        armMotor1.setInverted(false);
+        armMotor1.config_kF(0, 0);
+        armMotor1.config_kP(0, 0.1);
+        armMotor1.config_kI(0, 0);
+        armMotor1.config_kD(0, 0);
+        armMotor1.config_IntegralZone(0, 0);
+        armMotor1.configClosedLoopPeakOutput(0, 1);
+        armMotor1.configAllowableClosedloopError(0, 0);
 
-        // Configure the Talon FX for position control
-        ArmMotor2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-        ArmMotor2.setSensorPhase(false);
-        ArmMotor2.setInverted(false);
-        ArmMotor2.config_kF(0, 0);
-        ArmMotor2.config_kP(0, 0.1);
-        ArmMotor2.config_kI(0, 0);
-        ArmMotor2.config_kD(0, 0);
-        ArmMotor2.config_IntegralZone(0, 0);
-        ArmMotor2.configClosedLoopPeakOutput(0, 1);
-        ArmMotor2.configAllowableClosedloopError(0, 0);
+        // Follow armMotor1
+        armMotor2.follow(armMotor1);
     }
 
     public void setPosition(double positionDegrees) {
@@ -47,7 +41,12 @@ public class ArmSubsystem extends SubsystemBase {
         int positionTicks = (int) (positionDegrees * encoderTicksPerDegree);
 
         // Set the position setpoint for the ArmMotor1 FX
-        ArmMotor1.set(ControlMode.Position, positionTicks);
-        ArmMotor2.set(ControlMode.Position, -positionTicks);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        armMotor2.set(ControlMode.Position, positionTicks);
     }
+
+    public void rest() {
+        armMotor1.set(ControlMode.PercentOutput, 0);
+    }
+
 }

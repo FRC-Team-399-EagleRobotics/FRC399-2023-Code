@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.swerveConstants.DriveConstants;
 import utils.SwerveUtils;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
 
 
 // NavX aka gyro

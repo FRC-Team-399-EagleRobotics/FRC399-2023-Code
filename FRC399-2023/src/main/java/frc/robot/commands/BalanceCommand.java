@@ -61,9 +61,8 @@ public class BalanceCommand extends CommandBase {
          yAxisRate = Math.sin(rollAngleRadians) * -1;
      }
 
-    //Run drivetrain
+    //Run swerve drive
      try {
-         //Arcade drive with a given forward and turn rate */
          m_swerve.drive(
           -MathUtil.applyDeadband(yAxisRate, OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(xAxisRate, OIConstants.kDriveDeadband),
@@ -78,6 +77,7 @@ public class BalanceCommand extends CommandBase {
    // Called once the command ends or is interrupted.
    @Override
    public void end(boolean interrupted) {
+    
    }
    // Returns true when the command should end.
    @Override

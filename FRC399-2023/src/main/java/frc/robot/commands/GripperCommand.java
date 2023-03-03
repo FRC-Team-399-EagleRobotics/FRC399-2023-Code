@@ -13,7 +13,7 @@ public class GripperCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public GripperCommand(GripperSubsystem m_gripper) {
+  public GripperCommand(GripperSubsystem m_gripper, double iPwr, boolean iPos) {
     this.m_gripper = m_gripper;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_gripper);
@@ -25,11 +25,14 @@ public class GripperCommand extends CommandBase {
 
   // Called every time th scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_gripper.endGrab();
+  }
 
   // Returns true when the command should end.
   @Override

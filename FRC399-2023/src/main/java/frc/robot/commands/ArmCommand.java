@@ -19,7 +19,7 @@ public class ArmCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmCommand(ArmSubsystem m_arm) {
+  public ArmCommand(ArmSubsystem m_arm, double degree) {
     this.m_arm = m_arm;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_arm);
@@ -42,7 +42,9 @@ public class ArmCommand extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_arm.rest();
+  }
 
   // Returns true when the command should end.
   @Override

@@ -9,22 +9,32 @@ public final class Constants {
 
     public static class Gripper{
         // Change name/ID to corresponding. This is a template
-        public static final int GripperMotor1_ID = 9;
-        public static final int GripperMotor2_ID = 10;
+        public static final int gripperMotor1_ID = 11;
+        public static final int gripperMotor2_ID = 12;
         
-        public static final int SoleniodCim1_ID = 13;
-        public static final int SoleniodCim2_ID = 14;
+        public static final int wristSolenoid_ID = 0;
+        public static final int gripperSolenoid_ID = 1;
     }
 
     public static class Arm{
         // Change name/ID to corresponding. This is a template
-        public static final int ArmMotor1_ID = 11;
-        public static final int ArmMotor2_ID = 12;
+        public static final int armMotor1_ID = 9;
+        public static final int armMotor2_ID = 10;
     }
 
     public static class Controls{
-        public static final int leftJoy = 1;
-        public static final int rightJoy = 2;
-        public static final int operator = 0;
+        public static final int driver = 0;
+        public static final int operator = 1;
+
+        public static final int X_ID = 1;
+        public static final int A_ID = 2;
+        public static final int B_ID = 3;
+        public static final int Y_ID = 4;
+        public static final int leftBumper_ID = 5;
+        public static final int rightBumper_ID = 6;
+        public static final int leftTrigger_ID = 7;
+        public static final int rightTrigger_ID = 8;
+        public static final int start_ID = 10;
     }
+
 }
