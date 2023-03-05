@@ -14,22 +14,16 @@ import frc.robot.constants.Constants.Claw;
 
 public class ClawSubsystem extends SubsystemBase {
   private TalonSRX clawMotor1, clawMotor2;
-  private Solenoid wristSolenoid, intakeSolenoid;
   private Timer m_timer;
 
     // Variables to store state of Claw 
     double iPwr = 0.0;
-    boolean iPos = false;
 
 
   /** Creates a new ExampleSubsystem. */
   public ClawSubsystem() {
     clawMotor1 = new TalonSRX(Claw.clawMotor1_ID);
     clawMotor2 = new TalonSRX(Claw.clawMotor2_ID);
-
-    wristSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.wristSolenoid_ID);
-    intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.clawSolenoid_ID);
-
   }
 
   @Override
@@ -38,8 +32,6 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
  public void grab() {
-    // Activate pistons
-   // setPos(true);
     setPwr(-.25);
 
     // Activate motors for a certain time then stop to not squish the object
@@ -48,14 +40,13 @@ public class ClawSubsystem extends SubsystemBase {
     }*/
   }
 
-  public void endGrab() {
-    setPwr(0);
-  //  setPos(false);
-  }
 
   public void reverseGrab() {
-    setPwr(0.5);
-  //  setPos(false);
+    setPwr(0.25);
+  }
+
+  public void endGrab() {
+    setPwr(0);
   }
 
   public void setPwr(double i) {
@@ -64,11 +55,6 @@ public class ClawSubsystem extends SubsystemBase {
     clawMotor2.set(ControlMode.PercentOutput, i);
   }
 
- public void setPos(boolean p) {
-    iPos = p;
-    wristSolenoid.set(p);
-    intakeSolenoid.set(p);
-  }
 
   @Override
   public void simulationPeriodic() {

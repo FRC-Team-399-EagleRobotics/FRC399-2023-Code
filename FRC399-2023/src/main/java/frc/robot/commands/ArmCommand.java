@@ -35,24 +35,20 @@ public class ArmCommand extends CommandBase {
   // Called every time th scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Change button to the correct one.
-    /*if (RobotContainer.m_operator.getRawButton(2)){
-      m_arm.up();
-    } else if (RobotContainer.m_operator.getRawButton(3)){
-      m_arm.rest();
-    }else {
-      m_arm.done();
-    }*/
-   
-    if (RobotContainer.m_operator.getRawButton(Constants.Controls.X_ID)) {
+
+    if (RobotContainer.m_operator.getPOV() == 0) {
       m_arm.high();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.A_ID)){
+    } else if (RobotContainer.m_operator.getPOV() == 180){
       m_arm.mid();
+    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.rightBumper_ID)) {
+      m_arm.highIntake();
+    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.A_ID)){
+      m_arm.lowIntake();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.B_ID)){
-      m_arm.intake();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.Y_ID)){
       m_arm.stow();
-    }
+    } /*else if ((RobotContainer.m_operator.getRawAxis(1) > 0) ||  (RobotContainer.m_operator.getRawAxis(1) < 0)) {
+      m_arm.manual(RobotContainer.m_operator.getRawAxis(1));
+    }*/
   }
 
   // Called once the command ends or is interrupted.

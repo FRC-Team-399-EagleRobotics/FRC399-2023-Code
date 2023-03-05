@@ -10,30 +10,33 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 
 public class ArmSubsystem extends SubsystemBase {
-    private final TalonFX ArmMotor1, ArmMotor2;
-    private final Solenoid extensionSolenoid;
+    private final TalonFX armMotor1, armMotor2;
+    private final Solenoid extensionSolenoid, wristSolenoid, intakeSolenoid;
     double encoderTicksPerDegree;
 
     public ArmSubsystem() {
-        ArmMotor1 = new TalonFX(Arm.armMotor1_ID);
-        ArmMotor2 = new TalonFX(Arm.armMotor2_ID);
+        armMotor1 = new TalonFX(Arm.armMotor1_ID);
+        armMotor2 = new TalonFX(Arm.armMotor2_ID);
+
         extensionSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.extensionSolenoid_ID);
+        wristSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.wristSolenoid_ID);
+        intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.clawSolenoid_ID);
 
         this.encoderTicksPerDegree = 227.56;
         
         // Configure the Talon FX for position control
-        ArmMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-        ArmMotor1.setSensorPhase(false);
-        ArmMotor1.setInverted(false);
-        ArmMotor1.config_kF(0, 0);
-        ArmMotor1.config_kP(0, 0.1);
-        ArmMotor1.config_kI(0, 0);
-        ArmMotor1.config_kD(0, 0);
-        ArmMotor1.config_IntegralZone(0, 0);
-        ArmMotor1.configClosedLoopPeakOutput(0, 1);
-        ArmMotor1.configAllowableClosedloopError(0, 0);
+        armMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+        armMotor1.setSensorPhase(false);
+        armMotor1.setInverted(false);
+        armMotor1.config_kF(0, 0);
+        armMotor1.config_kP(0, 0.1);
+        armMotor1.config_kI(0, 0);
+        armMotor1.config_kD(0, 0);
+        armMotor1.config_IntegralZone(0, 0);
+        armMotor1.configClosedLoopPeakOutput(0, 1);
+        armMotor1.configAllowableClosedloopError(0, 0);
 
-        ArmMotor2.follow(ArmMotor1);
+        armMotor2.follow(armMotor1);
 
     }
 
@@ -43,29 +46,57 @@ public class ArmSubsystem extends SubsystemBase {
         int positionTicks = (int) (270 * encoderTicksPerDegree);
 
         // Set the position setpoint for the ArmMotor1 FX
-        ArmMotor1.set(ControlMode.Position, positionTicks);
+        armMotor1.set(ControlMode.Position, positionTicks);
     }
 
     public void high() {
         int positionTicks = (int) (270 * encoderTicksPerDegree);
-        ArmMotor1.set(ControlMode.Position, positionTicks);
+        armMotor1.set(ControlMode.Position, positionTicks);
+
+        wristSolenoid.set(true);
+        intakeSolenoid.set(true);
+        extensionSolenoid.set(true);
     }
 
 
     public void mid() {
         int positionTicks = (int) (180 * encoderTicksPerDegree);
-        ArmMotor1.set(ControlMode.Position, positionTicks);
+        armMotor1.set(ControlMode.Position, positionTicks);
 
+        wristSolenoid.set(true);
+        intakeSolenoid.set(true);
+        extensionSolenoid.set(false);
     }
 
-    public void intake() {
+    public void highIntake() {
+        int positionTicks = (int) (290 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+
+        wristSolenoid.set(true);
+        intakeSolenoid.set(true);
+        extensionSolenoid.set(true);
+    }
+
+    public void lowIntake() {
         int positionTicks = (int) (60 * encoderTicksPerDegree);
-        ArmMotor1.set(ControlMode.Position, positionTicks);
+        armMotor1.set(ControlMode.Position, positionTicks);
+
+        wristSolenoid.set(true);
+        intakeSolenoid.set(true);
+        extensionSolenoid.set(false);
     }
 
     public void stow() {
         int positionTicks = (int) (0 * encoderTicksPerDegree);
-        ArmMotor1.set(ControlMode.Position, positionTicks);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        
+        wristSolenoid.set(false);
+        intakeSolenoid.set(false);
+        extensionSolenoid.set(false);
+    }
+
+    public void manual(double i) {
+        armMotor1.set(ControlMode.PercentOutput, i);
     }
 
     public void rest() {

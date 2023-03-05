@@ -12,9 +12,7 @@ public final class Constants {
 
         public static final int clawMotor1_ID = 11;
         public static final int clawMotor2_ID = 12;
-        
-        public static final int wristSolenoid_ID = 0;
-        public static final int clawSolenoid_ID = 1;
+    
     }
 
     public static class Arm {
@@ -22,6 +20,8 @@ public final class Constants {
         public static final int armMotor1_ID = 9;
         public static final int armMotor2_ID = 10;
 
+        public static final int wristSolenoid_ID = 0;
+        public static final int clawSolenoid_ID = 1;
         public static final int extensionSolenoid_ID = 2;
     }
 
