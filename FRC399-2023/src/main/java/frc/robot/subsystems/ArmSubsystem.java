@@ -5,15 +5,19 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import frc.robot.constants.Constants.Arm;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 public class ArmSubsystem extends SubsystemBase {
     private final TalonFX ArmMotor1, ArmMotor2;
-    private final double encoderTicksPerDegree;
+    private final Solenoid extensionSolenoid;
+    double encoderTicksPerDegree;
 
     public ArmSubsystem() {
         ArmMotor1 = new TalonFX(Arm.armMotor1_ID);
         ArmMotor2 = new TalonFX(Arm.armMotor2_ID);
+        extensionSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.extensionSolenoid_ID);
 
         this.encoderTicksPerDegree = 227.56;
         
@@ -30,18 +34,41 @@ public class ArmSubsystem extends SubsystemBase {
         ArmMotor1.configAllowableClosedloopError(0, 0);
 
         ArmMotor2.follow(ArmMotor1);
+
     }
 
+  
     public void setPosition(double positionDegrees) {
         // Convert the position in degrees to encoder ticks
-        int positionTicks = (int) (positionDegrees * encoderTicksPerDegree);
+        int positionTicks = (int) (270 * encoderTicksPerDegree);
 
         // Set the position setpoint for the ArmMotor1 FX
         ArmMotor1.set(ControlMode.Position, positionTicks);
     }
 
+    public void high() {
+        int positionTicks = (int) (270 * encoderTicksPerDegree);
+        ArmMotor1.set(ControlMode.Position, positionTicks);
+    }
+
+
+    public void mid() {
+        int positionTicks = (int) (180 * encoderTicksPerDegree);
+        ArmMotor1.set(ControlMode.Position, positionTicks);
+
+    }
+
+    public void intake() {
+        int positionTicks = (int) (60 * encoderTicksPerDegree);
+        ArmMotor1.set(ControlMode.Position, positionTicks);
+    }
+
+    public void stow() {
+        int positionTicks = (int) (0 * encoderTicksPerDegree);
+        ArmMotor1.set(ControlMode.Position, positionTicks);
+    }
+
     public void rest() {
-        // Don't know the resting degree so just turning off motor
-        ArmMotor1.set(ControlMode.PercentOutput, 0);
+        encoderTicksPerDegree = 227.56;
     }
 }

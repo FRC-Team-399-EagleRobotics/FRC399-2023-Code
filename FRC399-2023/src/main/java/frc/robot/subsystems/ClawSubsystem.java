@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants.Claw;
 
 public class ClawSubsystem extends SubsystemBase {
-  private TalonSRX ClawMotor1, ClawMotor2;
-  private Solenoid wristSolenoid, ClawSolenoid;
+  private TalonSRX clawMotor1, clawMotor2;
+  private Solenoid wristSolenoid, intakeSolenoid;
   private Timer m_timer;
 
     // Variables to store state of Claw 
@@ -24,11 +24,11 @@ public class ClawSubsystem extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   public ClawSubsystem() {
-    ClawMotor1 = new TalonSRX(Claw.clawMotor1_ID);
-    ClawMotor2 = new TalonSRX(Claw.clawMotor2_ID);
+    clawMotor1 = new TalonSRX(Claw.clawMotor1_ID);
+    clawMotor2 = new TalonSRX(Claw.clawMotor2_ID);
 
     wristSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.wristSolenoid_ID);
-    ClawSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.clawSolenoid_ID);
+    intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Claw.clawSolenoid_ID);
 
   }
 
@@ -39,29 +39,35 @@ public class ClawSubsystem extends SubsystemBase {
 
  public void grab() {
     // Activate pistons
-    setPos(true);
+   // setPos(true);
+    setPwr(-.25);
 
     // Activate motors for a certain time then stop to not squish the object
-    if (m_timer.get() < 1) {
+    /*if (m_timer.get() < 1) {
     setPwr(.1);
-    }
+    }*/
   }
 
   public void endGrab() {
     setPwr(0);
-    setPos(false);
+  //  setPos(false);
+  }
+
+  public void reverseGrab() {
+    setPwr(0.5);
+  //  setPos(false);
   }
 
   public void setPwr(double i) {
     iPwr = i;
-    ClawMotor1.set(ControlMode.PercentOutput, i);
-    ClawMotor2.set(ControlMode.PercentOutput, i);
+    clawMotor1.set(ControlMode.PercentOutput, i);
+    clawMotor2.set(ControlMode.PercentOutput, i);
   }
 
-  public void setPos(boolean p) {
+ public void setPos(boolean p) {
     iPos = p;
     wristSolenoid.set(p);
-    ClawSolenoid.set(p);
+    intakeSolenoid.set(p);
   }
 
   @Override

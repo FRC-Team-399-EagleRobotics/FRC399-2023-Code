@@ -24,8 +24,12 @@ public class ClawCommand extends CommandBase {
  @Override
  public void execute() {
   // Change button to the correct one.
-  if (RobotContainer.m_driver.getRawButton(1)){
+  if (RobotContainer.m_operator.getRawButton(7)){
     m_claw.grab();
+  } else if (RobotContainer.m_operator.getRawButton(8)){
+    m_claw.reverseGrab();
+  }else{
+    m_claw.endGrab();
   }
  }
 

@@ -8,6 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.Constants;
 
 /** An example command that uses an example subsystem. */
 public class ArmCommand extends CommandBase {
@@ -35,8 +36,22 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
     // Change button to the correct one.
-    if (RobotContainer.m_driver.getRawButton(2)) {
-    m_arm.setPosition(180);
+    /*if (RobotContainer.m_operator.getRawButton(2)){
+      m_arm.up();
+    } else if (RobotContainer.m_operator.getRawButton(3)){
+      m_arm.rest();
+    }else {
+      m_arm.done();
+    }*/
+   
+    if (RobotContainer.m_operator.getRawButton(Constants.Controls.X_ID)) {
+      m_arm.high();
+    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.A_ID)){
+      m_arm.mid();
+    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.B_ID)){
+      m_arm.intake();
+    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.Y_ID)){
+      m_arm.stow();
     }
   }
 
