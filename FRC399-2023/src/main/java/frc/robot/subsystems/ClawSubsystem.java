@@ -42,7 +42,7 @@ public class ClawSubsystem extends SubsystemBase {
 
 
   public void reverseGrab() {
-    setPwr(0.25);
+    setPwr(1);
   }
 
   public void endGrab() {

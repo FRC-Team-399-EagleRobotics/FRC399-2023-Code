@@ -44,12 +44,13 @@ public class VisionAimCommands extends CommandBase {
 
     double x = limelight.getX() * pX;
     double y = limelight.getY() * pY;
+      
 
 
     double leftOut = x-y;
     double rightOut = -x-y;
 
-            m_swerve.drive(
+    m_swerve.drive(
           -MathUtil.applyDeadband(leftOut, OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(rightOut, OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(2), OIConstants.kDriveDeadband),
@@ -60,7 +61,11 @@ public class VisionAimCommands extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     limelight.setLight(true);
-    m_swerve.setTank(0, 0);
+    m_swerve.drive(
+          -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(2), OIConstants.kDriveDeadband),
+          true, true);
   }
 
   // Returns true when the command should end.

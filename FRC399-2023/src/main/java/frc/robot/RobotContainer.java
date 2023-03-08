@@ -38,6 +38,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -82,15 +85,7 @@ public class RobotContainer {
         // Configure default commands
         m_robotDrive.setDefaultCommand(m_swerve);
         //m_robotDrive.setDefaultCommand(m_armCommand);
-          // The left stick controls translation of the robot.
-          // Turning is controlled by the X axis of the right stick.
-          /*new RunCommand(
-              () -> m_robotDrive.drive(
-                  -MathUtil.applyDeadband(m_driver.getRawAxis(1), frc.robot.constants.swerveConstants.OIConstants.kDriveDeadband),
-                  -MathUtil.applyDeadband(m_driver.getRawAxis(0), frc.robot.constants.swerveConstants.OIConstants.kDriveDeadband),
-                  -MathUtil.applyDeadband(m_driver.getRawAxis(2), frc.robot.constants.swerveConstants.OIConstants.kDriveDeadband),
-                  true, true),
-                  m_robotDrive));*/
+
   }
 
   /**
@@ -108,14 +103,6 @@ public class RobotContainer {
     m_claw.setDefaultCommand(m_clawCommand);
     m_ArmSubsystem.setDefaultCommand(m_armCommand);
 
-
-
-    //m_robotDrive.setDefaultCommand(m_swerve);
-    /*new JoystickButton(m_driver, Button.kR1.value)
-    .whileTrue(new RunCommand(
-        () -> m_robotDrive.setX(),
-        m_robotDrive));*/
-
   }
 
   /**
@@ -123,6 +110,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
   public Command getAutonomousCommand() {
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
@@ -141,24 +129,29 @@ public class RobotContainer {
         new Pose2d(3, 0, new Rotation2d(0)),
         config);
 
+    PathPlannerTrajectory straightPath = PathPlanner.loadPath("Straight Path", new PathConstraints(.5, .25));
+    PathPlannerTrajectory spin3 = PathPlanner.loadPath("Spin3", new PathConstraints(1, .5));
+    PathPlannerTrajectory straightPath2 = PathPlanner.loadPath("Straight Path2", new PathConstraints(1, .5));
+
     var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+        AutoConstants.kPThetaController, 0.001, 0.1, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
+        straightPath2,
         m_robotDrive::getPose, // Functional interface to feed supplier
         DriveConstants.kDriveKinematics,
 
         // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
+        new PIDController(AutoConstants.kPXController, 0.001, 0.1),
+        new PIDController(AutoConstants.kPYController, 0.001, 0.1),
         thetaController,
         m_robotDrive::setModuleStates,
         m_robotDrive);
+      
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    m_robotDrive.resetOdometry(straightPath2.getInitialHolonomicPose());
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));

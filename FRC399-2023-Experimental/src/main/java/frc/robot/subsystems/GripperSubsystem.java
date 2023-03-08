@@ -31,7 +31,6 @@ public class GripperSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-<<<<<<< HEAD:FRC399-2023-Experimental/src/main/java/frc/robot/subsystems/GripperSubsystem.java
  public void grab(double i) {
   iPwr = i;
   gripperMotor1.set(ControlMode.PercentOutput, -i);
@@ -52,8 +51,6 @@ public class GripperSubsystem extends SubsystemBase {
     gripperSolenoid.set(p);
   }
 
-=======
->>>>>>> parent of b7104c6 (Wrapped up template code):FRC399-2023/src/main/java/frc/robot/subsystems/GripperSubsystem.java
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation

@@ -3,6 +3,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.apriltag.AprilTagDetection;
+import edu.wpi.first.apriltag.AprilTagDetector;
 
 
 public class Limelight {
@@ -10,11 +12,15 @@ public class Limelight {
     NetworkTable table;
     NetworkTableEntry tx;
     NetworkTableEntry ty;
+    NetworkTableEntry detect;
+
 
     public Limelight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
+        detect = table.getEntry("detect");
+
     }
 
 
