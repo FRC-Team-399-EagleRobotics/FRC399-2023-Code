@@ -120,39 +120,42 @@ public class RobotContainer {
         .setKinematics(DriveConstants.kDriveKinematics);
 
     // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+
+    // THIS DOES NOT WORK PROPERLY
+    Trajectory backwards = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        List.of(new Translation2d(1, 1), new Translation2d(1, 1)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
+        new Pose2d(-3, 0, new Rotation2d(0)),
         config);
 
     PathPlannerTrajectory straightPath = PathPlanner.loadPath("Straight Path", new PathConstraints(.5, .25));
     PathPlannerTrajectory spin3 = PathPlanner.loadPath("Spin3", new PathConstraints(1, .5));
-    PathPlannerTrajectory straightPath2 = PathPlanner.loadPath("Straight Path2", new PathConstraints(1, .5));
+    PathPlannerTrajectory straightPathReverse = PathPlanner.loadPath("Straight Path(reverse)", new PathConstraints(1, .5));
 
     var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0.001, 0.1, AutoConstants.kThetaControllerConstraints);
+        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        straightPath2,
+        straightPathReverse,
         m_robotDrive::getPose, // Functional interface to feed supplier
         DriveConstants.kDriveKinematics,
 
         // Position controllers
-        new PIDController(AutoConstants.kPXController, 0.001, 0.1),
-        new PIDController(AutoConstants.kPYController, 0.001, 0.1),
+        new PIDController(AutoConstants.kPXController, 0.0, 0),
+        new PIDController(AutoConstants.kPYController, 0.0, 0),
         thetaController,
         m_robotDrive::setModuleStates,
         m_robotDrive);
       
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(straightPath2.getInitialHolonomicPose());
-
+    m_robotDrive.resetOdometry(straightPathReverse.getInitialPose());
+    //m_robotDrive.resetOdometry(backwards.getInitialPose());
+    
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
