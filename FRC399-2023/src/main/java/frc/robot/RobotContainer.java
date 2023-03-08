@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
-import frc.robot.commands.ClawCommand;
+import frc.robot.commands.GrippyCommand;
 import frc.robot.constants.swerveConstants.AutoConstants;
 import frc.robot.constants.swerveConstants.DriveConstants;
 import frc.robot.constants.swerveConstants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.SwerveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.controller.PIDController;
@@ -65,9 +65,9 @@ public class RobotContainer {
   private final BalanceCommand m_balance = new BalanceCommand(m_robotDrive);
 
   // Claw 
-  private final ClawSubsystem m_claw = new ClawSubsystem();
+  private final GripperSubsystem m_claw = new GripperSubsystem();
 
-  private final ClawCommand m_clawCommand = new ClawCommand(m_claw);
+  private final GrippyCommand m_clawCommand = new GrippyCommand(m_claw);
 
   // The driver's controller
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);

@@ -7,11 +7,11 @@ package frc.robot.constants;
 
 public final class Constants {
 
-    public static class Claw {
+    public static class Gripper {
         // Change name/ID to corresponding. This is a template
 
-        public static final int clawMotor1_ID = 11;
-        public static final int clawMotor2_ID = 12;
+        public static final int gripperMotor1_ID = 11;
+        public static final int gripperMotor2_ID = 12;
     
     }
 

@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants.Claw;
+import frc.robot.constants.Constants.Gripper;
 
-public class ClawSubsystem extends SubsystemBase {
-  private TalonSRX clawMotor1, clawMotor2;
+public class GripperSubsystem extends SubsystemBase {
+  private TalonSRX gripperMotor1, gripperMotor2;
   private Timer m_timer;
 
     // Variables to store state of Claw 
@@ -21,9 +21,9 @@ public class ClawSubsystem extends SubsystemBase {
 
 
   /** Creates a new ExampleSubsystem. */
-  public ClawSubsystem() {
-    clawMotor1 = new TalonSRX(Claw.clawMotor1_ID);
-    clawMotor2 = new TalonSRX(Claw.clawMotor2_ID);
+  public GripperSubsystem() {
+    gripperMotor1 = new TalonSRX(Gripper.gripperMotor1_ID);
+    gripperMotor2 = new TalonSRX(Gripper.gripperMotor2_ID);
   }
 
   @Override
@@ -31,7 +31,7 @@ public class ClawSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
- public void grab() {
+ public void grip() {
     setPwr(-.25);
 
     // Activate motors for a certain time then stop to not squish the object
@@ -41,18 +41,18 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
 
-  public void reverseGrab() {
+  public void reverseGrip() {
     setPwr(1);
   }
 
-  public void endGrab() {
+  public void endGrip() {
     setPwr(0);
   }
 
   public void setPwr(double i) {
     iPwr = i;
-    clawMotor1.set(ControlMode.PercentOutput, i);
-    clawMotor2.set(ControlMode.PercentOutput, i);
+    gripperMotor1.set(ControlMode.PercentOutput, i);
+    gripperMotor2.set(ControlMode.PercentOutput, i);
   }
 
 

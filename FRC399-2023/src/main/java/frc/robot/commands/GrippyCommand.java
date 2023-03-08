@@ -1,18 +1,18 @@
 package frc.robot.commands;
 
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ClawCommand extends CommandBase {
+public class GrippyCommand extends CommandBase {
  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
- private final ClawSubsystem m_claw;
+ private final GripperSubsystem m_grippy;
 
- public ClawCommand(ClawSubsystem m_claw) {
-    this.m_claw = m_claw;
-    addRequirements(m_claw);
+ public GrippyCommand(GripperSubsystem m_grippy) {
+    this.m_grippy = m_grippy;
+    addRequirements(m_grippy);
  }
 
  // Called when the command is initially scheduled.
@@ -25,18 +25,18 @@ public class ClawCommand extends CommandBase {
  public void execute() {
   // Change button to the correct one.
   if (RobotContainer.m_operator.getRawButton(7)){
-    m_claw.grab();
+    m_grippy.grip();
   } else if (RobotContainer.m_operator.getRawButton(8)){
-    m_claw.reverseGrab();
+    m_grippy.reverseGrip();
   }else{
-    m_claw.endGrab();
+    m_grippy.endGrip();
   }
  }
 
  // Called once the command ends or is interrupted.
  @Override
  public void end(boolean interrupted) {
-  m_claw.endGrab();
+  m_grippy.endGrip();
  }
 
  // Returns true when the command should end.
