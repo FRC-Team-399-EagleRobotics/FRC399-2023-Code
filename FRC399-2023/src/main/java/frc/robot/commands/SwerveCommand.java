@@ -1,5 +1,4 @@
 package frc.robot.commands;
-
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
@@ -34,11 +33,14 @@ public class SwerveCommand extends CommandBase {
     // Turning is controlled by the X axis of the right stick.
   @Override
   public void execute() {
+
     m_swerve.drive(
                 -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(1), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(0), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(2), OIConstants.kDriveDeadband),
                 true, true);
+    
+                //MAXSwerveModule.get_encoder();
 
     if (RobotContainer.m_driver.getRawButton(Button.kR1.value)){
       m_swerve.setX();

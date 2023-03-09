@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems.drivetrain;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -156,6 +156,11 @@ public class MAXSwerveModule {
 
     m_desiredState = desiredState;
   }
+
+  /*public static void get_encoder(){
+    
+    SmartDashboard.putNumber("x", m_turningEncoder.getPosition());
+  }*/
 
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {

@@ -233,7 +233,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void zeroHeading() {
     m_gyro.reset();
   }
-
+  
   /**
    * Returns the heading of the robot.
    *

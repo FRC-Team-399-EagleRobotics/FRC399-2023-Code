@@ -10,6 +10,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+
+import java.util.HashMap;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -37,7 +40,7 @@ public final class swerveConstants {
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(27);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(27);
+    public static final double kWheelBase = Units.inchesToMeters(24);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -63,6 +66,8 @@ public final class swerveConstants {
     public static final int kRearLeftTurningCanId = 8;
 
     public static final boolean kGyroReversed = false;
+
+    
   }
 
   public static final class ModuleConstants {
@@ -131,6 +136,8 @@ public final class swerveConstants {
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
+    public static HashMap<String, Command> eventMap = new HashMap<>();
+
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
@@ -138,5 +145,23 @@ public final class swerveConstants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  public class PIDConstants {
+    public final double kP;
+    public final double kI;
+    public final double kD;
+    public final double period;
+  
+    public PIDConstants(double kP, double kI, double kD, double period) {
+      this.kP = kP;
+      this.kI = kI;
+      this.kD = kD;
+      this.period = period;
+    }
+  
+    public PIDConstants(double kP, double kI, double kD) {
+      this(kP, kI, kD, 0.02);
+    }
   }
 }
