@@ -7,6 +7,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.autonomous.autoGripper;
+import frc.robot.autonomous.autoArmMid;
+import frc.robot.autonomous.autoArmStow;
+
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.GrippyCommand;
@@ -90,7 +94,7 @@ public class RobotContainer {
   // The driver's controller
   //PS4Controller m_driver = new PS4Controller(OIConstants.kDriverControllerPort);
   public static Joystick m_driver = new Joystick(OIConstants.kDriverControllerPort);
-  public static Joystick m_operator = new Joystick(1);
+  public static Joystick m_operator = new Joystick(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -126,13 +130,19 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  /*HashMap<String, Command> eventMap = new HashMap<>(); //TODO: IMPLEMENT FOR DIFFERENT AUTONS
-eventMap.put("marker1", new PrintCommand("Passed marker 1"));*/
+   HashMap<String, Command> eventMap = new HashMap<>(); //TODO: IMPLEMENT FOR DIFFERENT AUTONS
+    
+  
+ 
+   ArrayList<PathPlannerTrajectory> straight = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("Holonomic Straight", new PathConstraints(2, 1.5));
+   ArrayList<PathPlannerTrajectory> balance = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("kinda balance", new PathConstraints(1, 1.0));
 
-   ArrayList<PathPlannerTrajectory> straight = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("Holonomic Straight", new PathConstraints(0.5, 0.5));
 
-   public static Command buildAuto1(List<PathPlannerTrajectory> trajs) {
+  public static Command buildAuto1(List<PathPlannerTrajectory> trajs) {
   //s_Swerve.resetOdometry(trajs.get(0).getInitialHolonomicPose());
+  HashMap<String, Command> eventMap = new HashMap<>();
+  eventMap.put("marker1", new PrintCommand("Hi"));
+  
   swerveAutoBuilder = new SwerveAutoBuilder(
       m_robotDrive::getPose,
       m_robotDrive::resetOdometry,
@@ -140,7 +150,7 @@ eventMap.put("marker1", new PrintCommand("Passed marker 1"));*/
       new PIDConstants(swerveConstants.AutoConstants.kPXController, 0, 0),
       new PIDConstants(swerveConstants.AutoConstants.kPThetaController, 0, 0),
       m_robotDrive::setModuleStates,
-      swerveConstants.AutoConstants.eventMap,
+      eventMap,
       true,
       m_robotDrive
   );
@@ -150,9 +160,9 @@ eventMap.put("marker1", new PrintCommand("Passed marker 1"));*/
    }
 
 
-  public Command getAutonomousCommand() {
-    // Create config for trajectory
-/*     TrajectoryConfig config = new TrajectoryConfig(
+  public SequentialCommandGroup getAutonomousCommand() {
+    //// Create config for trajectory
+/*TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
@@ -161,7 +171,11 @@ eventMap.put("marker1", new PrintCommand("Passed marker 1"));*/
     var thetaController = new ProfiledPIDController(
         AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-*/
+    */
+    autoGripper autoIntake = new autoGripper(m_claw, 1,  1.5); 
+    autoArmMid autoArmMid = new autoArmMid(m_ArmSubsystem, 2);
+    autoArmStow autoArmStow = new autoArmStow(m_ArmSubsystem, 2);
+
 
 // This is just an example event map. It would be better to have a constant, global event map
 // in your code that will be used by all path following commands.
@@ -170,6 +184,18 @@ eventMap.put("marker1", new PrintCommand("Passed marker 1"));*/
     //m_robotDrive.resetOdometry(straight.getInitialHolonomicPose());
     
     // Run path following command, then stop at the end.
-    return buildAuto1(straight);
+    SequentialCommandGroup auto;
+    
+    boolean autoDriveEnabled = true;
+    //boolean midAuto = false;
+
+    if(!autoDriveEnabled) {
+      auto = new SequentialCommandGroup(autoIntake);
+    } else {
+      auto = new SequentialCommandGroup(buildAuto1(balance));
+    }
+    
+    //auto.addCommands(buildAuto1(straight));
+    return auto;
   }
 }

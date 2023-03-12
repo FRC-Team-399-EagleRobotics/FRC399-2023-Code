@@ -1,24 +1,23 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.constants.Constants.Gripper;
-import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
-public class autoGripper extends CommandBase {
+public class autoArmStow extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private GripperSubsystem m_aGrip;
-    private double iPwr, t;
+    private ArmSubsystem m_aArmS;
+    private double t;
     Timer timer = new Timer();
     
     boolean isFinished = false;
 
-    public autoGripper(GripperSubsystem m_aGrip, double iPwr, double t) {
-        this.m_aGrip = m_aGrip;
-        this.iPwr = iPwr;
+    public autoArmStow(ArmSubsystem m_aArmS, double t) {
+        this.m_aArmS = m_aArmS;
+
         this.t = t;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(m_aGrip);
+        addRequirements(m_aArmS);
       }  
       @Override
       public void initialize() {
@@ -30,25 +29,21 @@ public class autoGripper extends CommandBase {
       public void execute() { // TODO Don't need true or false out take and intake
         if (timer.get() < t) {
         {
-            m_aGrip.reverseGrip();
-            m_aGrip.setPwr(iPwr);
+            m_aArmS.stow();
         }
         }else{
-            m_aGrip.setPwr(0);
-            m_aGrip.endGrip();
+            m_aArmS.stow();
             isFinished = true;
         }
       }
       @Override
       public void end(boolean interrupted)
       {
-        m_aGrip.endGrip();
-        m_aGrip.setPwr(0);
+        m_aArmS.stow();
       }
 
       @Override
       public boolean isFinished() {
         return isFinished;
       }
-      
-}
+    }

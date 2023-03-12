@@ -35,7 +35,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor1.config_IntegralZone(0, 0);
         armMotor1.configClosedLoopPeakOutput(0, 1);
         armMotor1.configAllowableClosedloopError(0, 0);
-
+        //armMotor1.configClosedloopRamp()
         armMotor2.follow(armMotor1);
 
     }
@@ -60,7 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void mid() {
-        int positionTicks = (int) (180 * encoderTicksPerDegree);
+        int positionTicks = (int) (225 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
 
         wristSolenoid.set(true);
@@ -68,8 +68,17 @@ public class ArmSubsystem extends SubsystemBase {
         extensionSolenoid.set(false);
     }
 
+    public void cubeShooter() {
+        int positionTicks = (int) (45 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+
+        wristSolenoid.set(false);
+        intakeSolenoid.set(false);
+        extensionSolenoid.set(false);
+    }
+
     public void highIntake() {
-        int positionTicks = (int) (290 * encoderTicksPerDegree);
+        int positionTicks = (int) (120 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
 
         wristSolenoid.set(true);
@@ -78,11 +87,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void lowIntake() {
-        int positionTicks = (int) (60 * encoderTicksPerDegree);
+        int positionTicks = (int) (30 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
 
         wristSolenoid.set(true);
-        intakeSolenoid.set(true);
+        intakeSolenoid.set(false);
         extensionSolenoid.set(false);
     }
 

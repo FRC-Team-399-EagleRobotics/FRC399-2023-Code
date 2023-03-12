@@ -44,6 +44,7 @@ public class VisionAimCommands extends CommandBase {
 
     double x = limelight.getX() * pX;
     double y = limelight.getY() * pY;
+    double a = limelight.getA();
 
     // Probably not going to work. 
             m_swerve.drive(

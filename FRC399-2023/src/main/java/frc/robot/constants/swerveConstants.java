@@ -123,6 +123,7 @@ public final class swerveConstants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.1;
   }
 
@@ -136,7 +137,7 @@ public final class swerveConstants {
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
-    public static HashMap<String, Command> eventMap = new HashMap<>();
+    //public static HashMap<String, Command> eventMap = new HashMap<>();
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
