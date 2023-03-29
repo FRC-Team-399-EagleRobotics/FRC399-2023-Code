@@ -45,9 +45,9 @@ public class ArmCommand extends CommandBase {
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.leftBumper_ID)){
       m_arm.lowIntake();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.A_ID)){
-      m_arm.cubeShooter();
+      m_arm.intakeTest();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.B_ID)){
-      m_arm.stow();
+      m_arm.intakeTest2();
     } /*else if ((RobotContainer.m_operator.getRawAxis(1) > 0) ||  (RobotContainer.m_operator.getRawAxis(1) < 0)) {
       m_arm.manual(RobotContainer.m_operator.getRawAxis(1));
     }*/

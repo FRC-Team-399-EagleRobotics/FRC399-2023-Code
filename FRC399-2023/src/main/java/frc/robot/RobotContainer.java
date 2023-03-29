@@ -189,10 +189,10 @@ public class RobotContainer {
     boolean autoDriveEnabled = true;
     //boolean midAuto = false;
 
-    if(!autoDriveEnabled) {
-      auto = new SequentialCommandGroup(autoIntake);
+    if(autoDriveEnabled) {
+      auto = new SequentialCommandGroup(autoIntake, buildAuto1(straight));
     } else {
-      auto = new SequentialCommandGroup(buildAuto1(balance));
+      auto = new SequentialCommandGroup(autoIntake);
     }
     
     //auto.addCommands(buildAuto1(straight));

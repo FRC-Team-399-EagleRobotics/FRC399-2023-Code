@@ -32,7 +32,7 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
  public void grip() {
-    setPwr(-1);
+    setPwr(-0.3);
 
     // Activate motors for a certain time then stop to not squish the object
     /*if (m_timer.get() < 1) {
