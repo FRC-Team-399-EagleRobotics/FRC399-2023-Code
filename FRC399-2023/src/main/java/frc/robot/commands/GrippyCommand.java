@@ -1,9 +1,11 @@
 package frc.robot.commands;
 
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.Constants;
 
 public class GrippyCommand extends CommandBase {
  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -28,7 +30,11 @@ public class GrippyCommand extends CommandBase {
     m_grippy.grip();
   } else if (RobotContainer.m_operator.getRawButton(8)){
     m_grippy.reverseGrip();
-  }else{
+  } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.leftBumper_ID)){
+    m_grippy.extend(true);
+  } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.rightBumper_ID)){
+    m_grippy.extend(false);
+  } else {
     m_grippy.endGrip();
   }
  }

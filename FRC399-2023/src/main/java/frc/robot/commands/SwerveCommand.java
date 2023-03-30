@@ -39,8 +39,6 @@ public class SwerveCommand extends CommandBase {
                 -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(0), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(2), OIConstants.kDriveDeadband),
                 true, true);
-    
-                //MAXSwerveModule.get_encoder();
 
     if (RobotContainer.m_driver.getRawButton(Button.kR1.value)){
       m_swerve.setX();

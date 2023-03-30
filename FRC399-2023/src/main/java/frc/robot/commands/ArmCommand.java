@@ -36,18 +36,25 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
+    double angle = m_arm.getAngle();
+
+
+    double adjusted = (angle/225) * (3.1415/2);
+
+    double kF = Math.sin(adjusted * -1);
+
+    m_arm.setKf(kF);
+
     if (RobotContainer.m_operator.getPOV() == 0) {
       m_arm.high();
     } else if (RobotContainer.m_operator.getPOV() == 180){
       m_arm.mid();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.rightBumper_ID)) {
+    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.X_ID)) {
       m_arm.highIntake();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.leftBumper_ID)){
-      m_arm.lowIntake();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.A_ID)){
-      m_arm.intakeTest();
+      m_arm.lowIntake();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.B_ID)){
-      m_arm.intakeTest2();
+      m_arm.stow();
     } /*else if ((RobotContainer.m_operator.getRawAxis(1) > 0) ||  (RobotContainer.m_operator.getRawAxis(1) < 0)) {
       m_arm.manual(RobotContainer.m_operator.getRawAxis(1));
     }*/

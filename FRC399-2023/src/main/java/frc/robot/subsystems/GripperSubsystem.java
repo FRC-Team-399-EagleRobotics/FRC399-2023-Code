@@ -9,12 +9,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.constants.Constants.Arm;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.constants.Constants.Gripper;
 
 public class GripperSubsystem extends SubsystemBase {
   private TalonSRX gripperMotor1, gripperMotor2;
   private Timer m_timer;
+  private final Solenoid intakeSolenoid;
 
     // Variables to store state of Claw 
     double iPwr = 0.0;
@@ -24,6 +27,11 @@ public class GripperSubsystem extends SubsystemBase {
   public GripperSubsystem() {
     gripperMotor1 = new TalonSRX(Gripper.gripperMotor1_ID);
     gripperMotor2 = new TalonSRX(Gripper.gripperMotor2_ID);
+
+    gripperMotor1.setNeutralMode(NeutralMode.Brake);
+    gripperMotor2.setNeutralMode(NeutralMode.Brake);
+
+    intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.clawSolenoid_ID);
   }
 
   @Override
@@ -32,7 +40,7 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
  public void grip() {
-    setPwr(-0.3);
+    setPwr(-1);
 
     // Activate motors for a certain time then stop to not squish the object
     /*if (m_timer.get() < 1) {
@@ -53,6 +61,10 @@ public class GripperSubsystem extends SubsystemBase {
     iPwr = i;
     gripperMotor1.set(ControlMode.PercentOutput, i);
     gripperMotor2.set(ControlMode.PercentOutput, i);
+  }
+
+  public void extend(boolean extension) {
+    intakeSolenoid.set(extension);
   }
 
 
