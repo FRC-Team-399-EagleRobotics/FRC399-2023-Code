@@ -4,20 +4,20 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
-public class autoArmMid extends CommandBase {
+public class autoArmShooter extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private ArmSubsystem m_aArmM;
+    private ArmSubsystem m_aArmS;
     private double t;
     Timer timer = new Timer();
     
     boolean isFinished = false;
 
-    public autoArmMid(ArmSubsystem m_aArmM, double t) {
-        this.m_aArmM = m_aArmM;
+    public autoArmShooter(ArmSubsystem m_aArmS, double t) {
+        this.m_aArmS = m_aArmS;
 
         this.t = t;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(m_aArmM);
+        addRequirements(m_aArmS);
       }  
       @Override
       public void initialize() {
@@ -29,22 +29,21 @@ public class autoArmMid extends CommandBase {
       public void execute() { // TODO Don't need true or false out take and intake
         if (timer.get() < t) {
         {
-            m_aArmM.mid();
+            m_aArmS.charlesStation();
         }
         }else{
-            m_aArmM.mid();
+            m_aArmS.charlesStation();
             isFinished = true;
         }
       }
       @Override
       public void end(boolean interrupted)
       {
-        m_aArmM.mid();
+        m_aArmS.charlesStation();
       }
 
       @Override
       public boolean isFinished() {
         return isFinished;
       }
-      
-}
+    }

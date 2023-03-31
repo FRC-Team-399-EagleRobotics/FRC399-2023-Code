@@ -28,9 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
     public double wrist_kP, wrist_kI, wrist_kD, wrist_kIz, wrist_kFF, wrist_kMaxOutput, wrist_kMinOutput;
     private SparkMaxPIDController m_pidController;
-    //private final Solenoid extensionSolenoid,
-//  wristSolenoid,
-    //intakeSolenoid;
+    private final Solenoid intakeSolenoid;
     double encoderTicksPerDegree;
 
     public ArmSubsystem() {
@@ -40,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //extensionSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.extensionSolenoid_ID);
 //      wristSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.wristSolenoid_ID);
-        //intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.clawSolenoid_ID);
+        intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.clawSolenoid_ID);
 
         this.encoderTicksPerDegree = 227.56;
 
@@ -51,7 +49,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor1.setSensorPhase(false);
         armMotor1.setInverted(false);
         armMotor1.config_kF(0, 0);
-        armMotor1.config_kP(0, 3);
+        armMotor1.config_kP(0, 2.5);
         armMotor1.config_kI(0, 0);
         armMotor1.config_kD(0, 0);
         armMotor1.config_IntegralZone(0, 0);
@@ -62,7 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2.setSensorPhase(false);
         armMotor2.setInverted(false);
         armMotor2.config_kF(0, 0);
-        armMotor2.config_kP(0, 3);
+        armMotor2.config_kP(0, 2.5);
         armMotor2.config_kI(0, 0);
         armMotor2.config_kD(0, 0);
         armMotor2.config_IntegralZone(0, 0);
@@ -84,10 +82,12 @@ public class ArmSubsystem extends SubsystemBase {
         // Motion Magic configuration
         armMotor1.configNominalOutputForward(0, Arm.kTimeoutMs);
 		armMotor1.configNominalOutputReverse(0, Arm.kTimeoutMs);
-		armMotor1.configPeakOutputForward(1, Arm.kTimeoutMs);
-		armMotor1.configPeakOutputReverse(-1, Arm.kTimeoutMs);
+		armMotor1.configPeakOutputForward(.9, Arm.kTimeoutMs);
+		armMotor1.configPeakOutputReverse(-0.30, Arm.kTimeoutMs);
         armMotor1.configMotionSCurveStrength(smoothing);
         armMotor1.setSelectedSensorPosition(0, 0, Arm.kTimeoutMs);
+
+    
 
         //armMotor1.configClosedloopRamp()
         armMotor2.follow(armMotor1);
@@ -153,12 +153,12 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void high() {
-        int positionTicks = (int) (300 * encoderTicksPerDegree);
+        int positionTicks = (int) (275 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(20, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(30, CANSparkMax.ControlType.kPosition);
 
 //        wristSolenoid.set(true);
-        //intakeSolenoid.set(true);
+        intakeSolenoid.set(false);
         //extensionSolenoid.set(true);
     }
 
@@ -166,52 +166,60 @@ public class ArmSubsystem extends SubsystemBase {
     public void mid() {
         int positionTicks = (int) (250 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(30, CANSparkMax.ControlType.kPosition);
 
         System.out.println(armMotor1.getMotorOutputVoltage());
 
 //        wristSolenoid.set(true);
-        //intakeSolenoid.set(true);
+        intakeSolenoid.set(false);
         //extensionSolenoid.set(false);
     }
 
-    public void cubeShooter() {
-        int positionTicks = (int) (45 * encoderTicksPerDegree);
+    public void chuckStation() {
+        int positionTicks = (int) (15 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(9, CANSparkMax.ControlType.kPosition);
 
 //        wristSolenoid.set(false);
-        //intakeSolenoid.set(false);
+        intakeSolenoid.set(false);
         //extensionSolenoid.set(false);
     }
 
-    public void highIntake() {
-        int positionTicks = (int) (120 * encoderTicksPerDegree);
+    public void charlesStation() {
+        int positionTicks = (int) (80 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
 
 //        wristSolenoid.set(true);
-        //intakeSolenoid.set(true);
+        intakeSolenoid.set(false);
         //extensionSolenoid.set(true);
     }
 
-    public void lowIntake() {
-        int positionTicks = (int) (30 * encoderTicksPerDegree);
+    public void cubeShooter() {
+        int positionTicks = (int) (50 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
 
+        intakeSolenoid.set(false);
+    }
+
+    public void lowIntake() {
+        int positionTicks = (int) (0 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        m_pidController.setReference(16.5, CANSparkMax.ControlType.kPosition);
+
 //       wristSolenoid.set(true);
-        //intakeSolenoid.set(false);
+        intakeSolenoid.set(false);
         //extensionSolenoid.set(false);
     }
 
     public void stow() {
-        int positionTicks = (int) (0 * encoderTicksPerDegree);
+        int positionTicks = (int) (5 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
         
 //        wristSolenoid.set(false);
-        //intakeSolenoid.set(false);
+        intakeSolenoid.set(false);
         //extensionSolenoid.set(false);
     }
 

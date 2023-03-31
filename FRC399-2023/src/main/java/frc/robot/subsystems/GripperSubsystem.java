@@ -17,7 +17,6 @@ import frc.robot.constants.Constants.Gripper;
 public class GripperSubsystem extends SubsystemBase {
   private TalonSRX gripperMotor1, gripperMotor2;
   private Timer m_timer;
-  private final Solenoid intakeSolenoid;
 
     // Variables to store state of Claw 
     double iPwr = 0.0;
@@ -31,7 +30,6 @@ public class GripperSubsystem extends SubsystemBase {
     gripperMotor1.setNeutralMode(NeutralMode.Brake);
     gripperMotor2.setNeutralMode(NeutralMode.Brake);
 
-    intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.clawSolenoid_ID);
   }
 
   @Override
@@ -61,10 +59,6 @@ public class GripperSubsystem extends SubsystemBase {
     iPwr = i;
     gripperMotor1.set(ControlMode.PercentOutput, i);
     gripperMotor2.set(ControlMode.PercentOutput, i);
-  }
-
-  public void extend(boolean extension) {
-    intakeSolenoid.set(extension);
   }
 
 

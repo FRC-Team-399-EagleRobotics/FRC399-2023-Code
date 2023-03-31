@@ -43,21 +43,23 @@ public class ArmCommand extends CommandBase {
 
     double kF = Math.sin(adjusted * -1);
 
-    m_arm.setKf(kF);
+    //m_arm.setKf(kF);
 
     if (RobotContainer.m_operator.getPOV() == 0) {
       m_arm.high();
     } else if (RobotContainer.m_operator.getPOV() == 180){
       m_arm.mid();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.X_ID)) {
-      m_arm.highIntake();
+      m_arm.charlesStation();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.A_ID)){
       m_arm.lowIntake();
     } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.B_ID)){
       m_arm.stow();
-    } /*else if ((RobotContainer.m_operator.getRawAxis(1) > 0) ||  (RobotContainer.m_operator.getRawAxis(1) < 0)) {
-      m_arm.manual(RobotContainer.m_operator.getRawAxis(1));
-    }*/
+    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.Y_ID)) {
+      m_arm.chuckStation();
+    } else if (RobotContainer.m_operator.getPOV() == 90) {
+      m_arm.cubeShooter();
+    }
   }
 
   // Called once the command ends or is interrupted.

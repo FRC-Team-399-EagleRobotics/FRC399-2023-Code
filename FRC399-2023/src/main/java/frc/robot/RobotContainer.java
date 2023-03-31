@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.autonomous.autoGripper;
-import frc.robot.autonomous.autoArmMid;
 import frc.robot.autonomous.autoArmStow;
+import frc.robot.autonomous.autoArmShooter;
 
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
@@ -173,8 +173,8 @@ public class RobotContainer {
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     */
     autoGripper autoIntake = new autoGripper(m_claw, 1,  1.5); 
-    autoArmMid autoArmMid = new autoArmMid(m_ArmSubsystem, 2);
     autoArmStow autoArmStow = new autoArmStow(m_ArmSubsystem, 2);
+    autoArmShooter autoArmShooter = new autoArmShooter(m_ArmSubsystem, 3);
 
 
 // This is just an example event map. It would be better to have a constant, global event map
@@ -186,11 +186,13 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     SequentialCommandGroup auto;
     
-    boolean autoDriveEnabled = true;
+    int autoDriveEnabled = 1;
     //boolean midAuto = false;
 
-    if(autoDriveEnabled) {
-      auto = new SequentialCommandGroup(autoIntake, buildAuto1(straight));
+    if(autoDriveEnabled == 1) {
+      auto = new SequentialCommandGroup(autoArmShooter, autoIntake, autoArmStow, buildAuto1(straight));
+    } else if (autoDriveEnabled == 2) {
+      auto = new SequentialCommandGroup(autoIntake, buildAuto1(balance));
     } else {
       auto = new SequentialCommandGroup(autoIntake);
     }
