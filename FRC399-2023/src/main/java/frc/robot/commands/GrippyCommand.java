@@ -30,6 +30,8 @@ public class GrippyCommand extends CommandBase {
     m_grippy.grip();
   } else if (RobotContainer.m_operator.getRawButton(8)){
     m_grippy.reverseGrip();
+  } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.rightBumper_ID)){
+    m_grippy.slowGrip();
   } else {
     m_grippy.endGrip();
   }

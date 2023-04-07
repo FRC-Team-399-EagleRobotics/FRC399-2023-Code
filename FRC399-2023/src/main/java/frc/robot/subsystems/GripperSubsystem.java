@@ -55,6 +55,10 @@ public class GripperSubsystem extends SubsystemBase {
     setPwr(0);
   }
 
+  public void slowGrip() {
+    setPwr(0.5);
+  }
+
   public void setPwr(double i) {
     iPwr = i;
     gripperMotor1.set(ControlMode.PercentOutput, i);

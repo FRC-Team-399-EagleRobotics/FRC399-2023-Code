@@ -82,7 +82,7 @@ public class ArmSubsystem extends SubsystemBase {
         // Motion Magic configuration
         armMotor1.configNominalOutputForward(0, Arm.kTimeoutMs);
 		armMotor1.configNominalOutputReverse(0, Arm.kTimeoutMs);
-		armMotor1.configPeakOutputForward(.9, Arm.kTimeoutMs);
+		armMotor1.configPeakOutputForward(.80, Arm.kTimeoutMs);
 		armMotor1.configPeakOutputReverse(-0.30, Arm.kTimeoutMs);
         armMotor1.configMotionSCurveStrength(smoothing);
         armMotor1.setSelectedSensorPosition(0, 0, Arm.kTimeoutMs);
@@ -196,9 +196,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void cubeShooter() {
-        int positionTicks = (int) (50 * encoderTicksPerDegree);
+        int positionTicks = (int) (0 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(5, CANSparkMax.ControlType.kPosition);
 
         intakeSolenoid.set(false);
     }
