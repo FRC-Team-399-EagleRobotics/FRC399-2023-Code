@@ -14,6 +14,9 @@ import frc.robot.RobotContainer;
 public class SwerveCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final DriveSubsystem m_swerve;
+
+    double x = 0;
+    double y = RobotContainer.m_driver.getRawAxis(0);;
       /**
    * Creates a new ExampleCommand.
    *
@@ -27,16 +30,30 @@ public class SwerveCommand extends CommandBase {
 
   
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
     // The left stick controls translation of the robot.
     // Turning is controlled by the X axis of the right stick.
   @Override
   public void execute() {
+    double pX = 0.02, pY = 0.04;
+
+    boolean autoDrive = RobotContainer.m_driver.getRawButtonPressed(6) || RobotContainer.m_driver.getRawButtonPressed(7) || RobotContainer.m_driver.getRawButtonPressed(8);
+
+
+    if(autoDrive) {
+      x = m_swerve.getX() * pX;
+      //y = m_swerve.getY() * pY;
+      double steer = 0;
+    } else {
+      x = RobotContainer.m_driver.getRawAxis(1);
+    }
 
     m_swerve.drive(
-                -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(1), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(0), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(x, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(y, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(2), OIConstants.kDriveDeadband),
                 true, true);
 

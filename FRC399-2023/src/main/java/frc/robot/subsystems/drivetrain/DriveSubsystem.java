@@ -12,8 +12,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -72,9 +76,30 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+  // Limelight
+  NetworkTable table;
+  // Basic targeting
+  NetworkTableEntry tx;
+  NetworkTableEntry ty;
+  NetworkTableEntry ta;
+
+  // AprilTag and 3D Data
+  NetworkTableEntry tid;
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     m_gyro.calibrate();
+
+    // Limelight
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    // Basic targeting
+    tx = table.getEntry("tx");
+    ty = table.getEntry("ty");
+    ta = table.getEntry("ta");
+
+    // AprilTag and 3D Data
+    tid = table.getEntry("tid");
   }
 
   @Override
@@ -263,8 +288,28 @@ public class DriveSubsystem extends SubsystemBase {
    double pitchAngleDegrees = m_gyro.getPitch();
    return pitchAngleDegrees;
  }
+
  // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
 
 //END of NavX(gyro) balance commands
+
+ // Start of limelight code
+ public double getX() {
+  tx = table.getEntry("tx");
+
+  SmartDashboard.putNumber("x", tx.getDouble(0.0));
+  return tx.getDouble(0.0);
+
+}
+
+public double getY() {
+  ty = table.getEntry("ty");
+  return ty.getDouble(0.0);        
+}
+
+public double getA() {
+  ta = table.getEntry("ta");
+  return ta.getDouble(0.0);  
+}
 
 }
