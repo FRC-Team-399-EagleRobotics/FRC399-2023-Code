@@ -7,8 +7,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.autonomous.autoGripper;
 import frc.robot.autonomous.autoArmStow;
+import frc.robot.autonomous.autoDoNothing;
 import frc.robot.autonomous.autoArmShooter;
 
 import frc.robot.commands.ArmCommand;
@@ -20,6 +22,7 @@ import frc.robot.constants.swerveConstants.DriveConstants;
 import frc.robot.constants.swerveConstants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.Limelight;
 import frc.robot.commands.SwerveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -44,6 +47,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import frc.robot.subsystems.drivetrain.DriveSubsystem;
 import java.util.List;
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -172,9 +177,10 @@ public class RobotContainer {
         AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     */
-    autoGripper autoIntake = new autoGripper(m_claw, 1,  1.5); 
+    autoGripper autoIntake = new autoGripper(m_claw, 1.5);
     autoArmStow autoArmStow = new autoArmStow(m_ArmSubsystem, 2);
     autoArmShooter autoArmShooter = new autoArmShooter(m_ArmSubsystem, 3);
+    autoDoNothing autoNothing = new autoDoNothing(m_claw, 0);
 
 
 // This is just an example event map. It would be better to have a constant, global event map
@@ -193,8 +199,10 @@ public class RobotContainer {
       auto = new SequentialCommandGroup(autoArmShooter, autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 2) {
       auto = new SequentialCommandGroup(autoIntake, buildAuto1(balance));
-    } else {
+    } else if (autoDriveEnabled == 3) {
       auto = new SequentialCommandGroup(autoIntake);
+    } else {
+      auto = new SequentialCommandGroup(autoNothing);
     }
     
     //auto.addCommands(buildAuto1(straight));

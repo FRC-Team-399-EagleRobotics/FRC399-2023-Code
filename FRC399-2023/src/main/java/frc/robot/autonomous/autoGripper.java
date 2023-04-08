@@ -13,7 +13,7 @@ public class autoGripper extends CommandBase {
     
     boolean isFinished = false;
 
-    public autoGripper(GripperSubsystem m_aGrip, double iPwr, double t) {
+    public autoGripper(GripperSubsystem m_aGrip, double t) {
         this.m_aGrip = m_aGrip;
         this.iPwr = iPwr;
         this.t = t;
@@ -31,10 +31,8 @@ public class autoGripper extends CommandBase {
         if (timer.get() < t) {
         {
             m_aGrip.reverseGrip();
-            m_aGrip.setPwr(iPwr);
         }
         }else{
-            m_aGrip.setPwr(0);
             m_aGrip.endGrip();
             isFinished = true;
         }
@@ -43,7 +41,6 @@ public class autoGripper extends CommandBase {
       public void end(boolean interrupted)
       {
         m_aGrip.endGrip();
-        m_aGrip.setPwr(0);
       }
 
       @Override
