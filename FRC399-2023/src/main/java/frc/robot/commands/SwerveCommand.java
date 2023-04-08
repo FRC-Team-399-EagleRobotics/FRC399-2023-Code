@@ -40,21 +40,30 @@ public class SwerveCommand extends CommandBase {
   public void execute() {
     double pX = 0.02, pY = 0.04;
 
+    // Autodrive will be true if left or right trigger is being pressed or the right bumper. 
     boolean autoDrive = RobotContainer.m_driver.getRawButtonPressed(6) || RobotContainer.m_driver.getRawButtonPressed(7) || RobotContainer.m_driver.getRawButtonPressed(8);
-
-
+    double steer = 0;
+    System.out.println(m_swerve.getHeading());
     if(autoDrive) {
+      // Lock X to the apriltag
       x = m_swerve.getX() * pX;
       //y = m_swerve.getY() * pY;
-      double steer = 0;
+      
+      // Else allow the driver to move by x axis
     } else {
       x = RobotContainer.m_driver.getRawAxis(1);
+      y = RobotContainer.m_driver.getRawAxis(0);
+      if(RobotContainer.m_driver.getRawButton(1)) {
+        steer = 0.02 * (90 - m_swerve.getHeading()); 
+      } else {
+        steer = RobotContainer.m_driver.getRawAxis(2);
+      }
     }
 
     m_swerve.drive(
                 -MathUtil.applyDeadband(x, OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(y, OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(RobotContainer.m_driver.getRawAxis(2), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(steer, OIConstants.kDriveDeadband),
                 true, true);
 
     if (RobotContainer.m_driver.getRawButton(Button.kR1.value)){
