@@ -45,20 +45,26 @@ public class ArmCommand extends CommandBase {
 
     //m_arm.setKf(kF);
 
-    if (RobotContainer.m_operator.getPOV() == 0) {
-      m_arm.high();
-    } else if (RobotContainer.m_operator.getPOV() == 180){
-      m_arm.mid();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.X_ID)) {
-      m_arm.charlesStation();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.A_ID)){
-      m_arm.lowIntake();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.B_ID)){
+    if (RobotContainer.m_operator.getRawButton(1)) {
+      m_arm.coneHigh();
+    } else if (RobotContainer.m_operator.getRawButton(2)){
+      m_arm.cubeHigh();
+    } else if (RobotContainer.m_operator.getRawButton(3)) {
+      m_arm.coneMid();
+    } else if (RobotContainer.m_operator.getRawButton(4)){
+      m_arm.cubeMid();
+    } else if (RobotContainer.m_operator.getRawButton(5)){
+      m_arm.coneLow();
+    } else if (RobotContainer.m_operator.getRawButton(6)) {
+      m_arm.cubeLow();
+    } else if (RobotContainer.m_operator.getRawButton(7)) {
+      m_arm.coneLowIntake();
+    } else if (RobotContainer.m_operator.getRawButton(8)) {
+      m_arm.cubeLowIntake();
+    } else if (RobotContainer.m_operator.getRawButton(9)) {
+      m_arm.coneCharlesIntake();
+    } else if (RobotContainer.m_operator.getRawButton(10)) {
       m_arm.stow();
-    } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.Y_ID)) {
-      m_arm.chuckStation();
-    } else if (RobotContainer.m_operator.getPOV() == 90) {
-      m_arm.cubeShooter();
     }
   }
 

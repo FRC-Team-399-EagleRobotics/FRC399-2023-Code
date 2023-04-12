@@ -26,12 +26,10 @@ public class GrippyCommand extends CommandBase {
  @Override
  public void execute() {
   // Change button to the correct one.
-  if (RobotContainer.m_operator.getRawButton(7)){
+  if (RobotContainer.m_operator.getRawAxis(1) == -1){
     m_grippy.grip();
-  } else if (RobotContainer.m_operator.getRawButton(8)){
+  } else if (RobotContainer.m_operator.getRawAxis(1) == 1){
     m_grippy.reverseGrip();
-  } else if (RobotContainer.m_operator.getRawButton(Constants.Controls.rightBumper_ID)){
-    m_grippy.slowGrip();
   } else {
     m_grippy.endGrip();
   }

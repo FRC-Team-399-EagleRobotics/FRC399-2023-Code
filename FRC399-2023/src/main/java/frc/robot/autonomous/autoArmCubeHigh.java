@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
-public class autoArmShooter extends CommandBase {
+public class autoArmCubeHigh extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private ArmSubsystem m_aArmS;
     private double t;
@@ -12,7 +12,7 @@ public class autoArmShooter extends CommandBase {
     
     boolean isFinished = false;
 
-    public autoArmShooter(ArmSubsystem m_aArmS, double t) {
+    public autoArmCubeHigh(ArmSubsystem m_aArmS, double t) {
         this.m_aArmS = m_aArmS;
 
         this.t = t;
@@ -29,17 +29,17 @@ public class autoArmShooter extends CommandBase {
       public void execute() { // TODO Don't need true or false out take and intake
         if (timer.get() < t) {
         {
-            m_aArmS.cubeMid();
+            m_aArmS.cubeHigh();
         }
         }else{
-            m_aArmS.cubeMid();
+            m_aArmS.cubeHigh();
             isFinished = true;
         }
       }
       @Override
       public void end(boolean interrupted)
       {
-        m_aArmS.cubeMid();
+        m_aArmS.cubeHigh();
       }
 
       @Override

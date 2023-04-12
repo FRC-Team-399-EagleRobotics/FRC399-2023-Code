@@ -28,17 +28,12 @@ public class ArmSubsystem extends SubsystemBase {
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
     public double wrist_kP, wrist_kI, wrist_kD, wrist_kIz, wrist_kFF, wrist_kMaxOutput, wrist_kMinOutput;
     private SparkMaxPIDController m_pidController;
-    private final Solenoid intakeSolenoid;
     double encoderTicksPerDegree;
 
     public ArmSubsystem() {
         armMotor1 = new TalonFX(Arm.armMotor1_ID);
         armMotor2 = new TalonFX(Arm.armMotor2_ID);
         wristMotor = new CANSparkMax(Arm.wristMotor, MotorType.kBrushless);
-
-        //extensionSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.extensionSolenoid_ID);
-//      wristSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.wristSolenoid_ID);
-        intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Arm.clawSolenoid_ID);
 
         this.encoderTicksPerDegree = 227.56;
 
@@ -144,83 +139,72 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor1.set(TalonFXControlMode.MotionMagic, positionTicks);
     }
 
-    public void intakeTest() {
-        m_pidController.setReference(15, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void intakeTest2() {
-        m_pidController.setReference(-15, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void high() {
+    public void cubeHigh() {
         int positionTicks = (int) (275 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(30, CANSparkMax.ControlType.kPosition);
+    }
 
-//        wristSolenoid.set(true);
-        intakeSolenoid.set(false);
-        //extensionSolenoid.set(true);
+    public void coneHigh() {
+        int positionTicks = (int) (290 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        m_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
     }
 
 
-    public void mid() {
-        int positionTicks = (int) (250 * encoderTicksPerDegree);
+    public void cubeMid() {
+        int positionTicks = (int) (80 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void coneMid() {
+        int positionTicks = (int) (260 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(30, CANSparkMax.ControlType.kPosition);
-
-        System.out.println(armMotor1.getMotorOutputVoltage());
-
-//        wristSolenoid.set(true);
-        intakeSolenoid.set(false);
-        //extensionSolenoid.set(false);
     }
 
-    public void chuckStation() {
+    public void cubeLow() {
         int positionTicks = (int) (15 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(9, CANSparkMax.ControlType.kPosition);
 
-//        wristSolenoid.set(false);
-        intakeSolenoid.set(false);
-        //extensionSolenoid.set(false);
     }
 
-    public void charlesStation() {
-        int positionTicks = (int) (80 * encoderTicksPerDegree);
+    public void coneLow() {
+        int positionTicks = (int) (15 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        m_pidController.setReference(15, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void cubeLowIntake() {
+        int positionTicks = (int) (45 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        m_pidController.setReference(20, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void coneLowIntake() {
+        int positionTicks = (int) (45 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.Position, positionTicks);
+        m_pidController.setReference(16.5, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void cubeCharlesIntake() {
+        int positionTicks = (int) (70 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
-
-//        wristSolenoid.set(true);
-        intakeSolenoid.set(false);
-        //extensionSolenoid.set(true);
     }
 
-    public void cubeShooter() {
-        int positionTicks = (int) (0 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(5, CANSparkMax.ControlType.kPosition);
-
-        intakeSolenoid.set(false);
-    }
-
-    public void lowIntake() {
+    public void coneCharlesIntake() {
         int positionTicks = (int) (0 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(16.5, CANSparkMax.ControlType.kPosition);
-
-//       wristSolenoid.set(true);
-        intakeSolenoid.set(false);
-        //extensionSolenoid.set(false);
     }
 
     public void stow() {
         int positionTicks = (int) (5 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.Position, positionTicks);
         m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
-        
-//        wristSolenoid.set(false);
-        intakeSolenoid.set(false);
-        //extensionSolenoid.set(false);
     }
 
     public void manual(double i) {

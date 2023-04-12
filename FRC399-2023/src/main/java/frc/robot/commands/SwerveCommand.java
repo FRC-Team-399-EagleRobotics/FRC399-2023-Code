@@ -54,8 +54,24 @@ public class SwerveCommand extends CommandBase {
       x = RobotContainer.m_driver.getRawAxis(1);
       y = RobotContainer.m_driver.getRawAxis(0);
       if(RobotContainer.m_driver.getRawButton(1)) {
-        steer = 0.02 * (90 - m_swerve.getHeading()); 
-      } else {
+        steer = 0.02 * (AngleDifference(m_swerve.getHeading(), -90));
+        if(Math.abs(steer) > .4) {
+          steer = .4 * Math.signum(steer);
+        }
+
+      } else if(RobotContainer.m_driver.getRawButton(2)) {
+        steer = 0.02 * (AngleDifference(m_swerve.getHeading(), 180));
+        if(Math.abs(steer) > .4) {
+          steer = .4 * Math.signum(steer);
+        }
+
+      } else if(RobotContainer.m_driver.getRawButton(3)) {
+        steer = 0.02 * (AngleDifference(m_swerve.getHeading(), 90));
+        if(Math.abs(steer) > .4) {
+          steer = .4 * Math.signum(steer);
+        }
+
+      }else {
         steer = RobotContainer.m_driver.getRawAxis(2);
       }
     }
@@ -71,8 +87,13 @@ public class SwerveCommand extends CommandBase {
     }
 
   }
-        
 
+  public static double AngleDifference(double desiredAngle, double currentAngle) {
+    double difference = desiredAngle - currentAngle;
+    
+    return difference >  90 ? 180 - difference : difference;
+}
+      
 
   @Override
   public void end(boolean interrupted) {
