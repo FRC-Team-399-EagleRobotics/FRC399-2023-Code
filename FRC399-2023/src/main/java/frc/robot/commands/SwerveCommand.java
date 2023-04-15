@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.constants.swerveConstants.OIConstants;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+
+import javax.swing.text.AbstractDocument.LeafElement;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.RobotContainer;
@@ -16,7 +19,8 @@ public class SwerveCommand extends CommandBase {
     private final DriveSubsystem m_swerve;
 
     double x = 0;
-    double y = RobotContainer.m_driver.getRawAxis(0);;
+    double y = RobotContainer.m_driver.getRawAxis(0);
+    double offset = 0;
       /**
    * Creates a new ExampleCommand.
    *
@@ -40,16 +44,41 @@ public class SwerveCommand extends CommandBase {
   public void execute() {
     double pX = 0.02, pY = 0.04;
 
-    // Autodrive will be true if left or right trigger is being pressed or the right bumper. 
-    boolean autoDrive = RobotContainer.m_driver.getRawButtonPressed(6) || RobotContainer.m_driver.getRawButtonPressed(7) || RobotContainer.m_driver.getRawButtonPressed(8);
+    // Autodrive will be true if left or right trigger is being pressed or the right bumper.
+    boolean left = RobotContainer.m_driver.getRawButton(7);
+    boolean center = RobotContainer.m_driver.getRawButton(5); 
+    boolean right = RobotContainer.m_driver.getRawButton(6); 
+
+    boolean autoDrive = left|| center || right;
     double steer = 0;
-    System.out.println(m_swerve.getHeading());
+    //System.out.println(m_swerve.getHeading());
     if(autoDrive) {
-      // Lock X to the apriltag
-      x = m_swerve.getX() * pX;
+      // Left, right, and center has different offsets meaning the bot will move a bit away from the apriltag depending of the offset
+      // NOT TESTED AND UNSURE!
+      if (left) {
+        offset = -.02;
+      }  else if (center) {
+        offset = 0;
+      } else if (right) {
+        offset = .02;
+      }
+
+      // Lock Y to the apriltag. Aka can't limelight will move you left and right to center to goal
+      y = m_swerve.getX() * pX + offset;
+
+      // Allow you to move forward and back
+      x = RobotContainer.m_driver.getRawAxis(1);
+      // Centers
+      steer = 0.02 * (AngleDifference(m_swerve.getHeading(), 180));
+        if(Math.abs(steer) > .4) {
+          steer = .4 * Math.signum(steer);
+      }
+      // Print info about limelight and motor for left, right, and center offset configuration
+      System.out.println("Limelight: " + m_swerve.getX()*pX);
+      System.out.println("Driver: " + y);
       //y = m_swerve.getY() * pY;
       
-      // Else allow the driver to move by x axis
+      // Else allow the driver full control to x, y, and steering(z) axis
     } else {
       x = RobotContainer.m_driver.getRawAxis(1);
       y = RobotContainer.m_driver.getRawAxis(0);
@@ -90,6 +119,8 @@ public class SwerveCommand extends CommandBase {
 
   public static double AngleDifference(double desiredAngle, double currentAngle) {
     double difference = desiredAngle - currentAngle;
+
+    difference = difference % 360;
     
     return difference >  90 ? 180 - difference : difference;
 }
