@@ -56,7 +56,7 @@ public class GripperSubsystem extends SubsystemBase {
 
   public void endGrip() {
 
-    setPwr(.25 * lastSign);
+    setPwr(.15 * lastSign);
   }
 
   public void slowGrip() {

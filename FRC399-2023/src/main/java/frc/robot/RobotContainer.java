@@ -15,6 +15,7 @@ import frc.robot.autonomous.autoArmConeHigh;
 //import frc.robot.autonomous.autoArmConeMid;
 import frc.robot.autonomous.autoArmCubeHigh;
 import frc.robot.autonomous.autoArmShooter;
+import frc.robot.autonomous.autoSetX;
 
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.BalanceCommand;
@@ -149,7 +150,7 @@ public class RobotContainer {
 
 
   public static Command buildAuto1(List<PathPlannerTrajectory> trajs) {
-  //s_Swerve.resetOdometry(trajs.get(0).getInitialHolonomicPose());
+  m_robotDrive.resetOdometry(trajs.get(0).getInitialHolonomicPose());
   HashMap<String, Command> eventMap = new HashMap<>();
   eventMap.put("marker1", new PrintCommand("Hi"));
   
@@ -205,10 +206,11 @@ public class RobotContainer {
     */
     autoGripper autoIntake = new autoGripper(m_claw, 1.5);
     autoArmStow autoArmStow = new autoArmStow(m_ArmSubsystem, 2);
-    autoArmShooter autoArmShooter = new autoArmShooter(m_ArmSubsystem, 3);
-    autoArmCubeHigh autoCubeHigh = new autoArmCubeHigh(m_ArmSubsystem, 3);
-    autoArmConeHigh autoConeHigh = new autoArmConeHigh(m_ArmSubsystem, 3);
+    autoArmShooter autoArmShooter = new autoArmShooter(m_ArmSubsystem, 2);
+    autoArmCubeHigh autoCubeHigh = new autoArmCubeHigh(m_ArmSubsystem, 2);
+    autoArmConeHigh autoConeHigh = new autoArmConeHigh(m_ArmSubsystem, 2);
     autoDoNothing autoNothing = new autoDoNothing(m_claw, 2);
+    autoSetX autoX = new autoSetX(m_robotDrive, 1);
 
 
 // This is just an example event map. It would be better to have a constant, global event map
@@ -220,17 +222,17 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     SequentialCommandGroup auto;
     
-    int autoDriveEnabled = 1;
+    int autoDriveEnabled = 4;
     //boolean midAuto = false;
 
     if(autoDriveEnabled == 1) {
-      auto = new SequentialCommandGroup(/*autoCubeHigh, */buildAuto1(shortPath), /*autoIntake, autoArmStow, */buildAuto1(balance), autoNothing, buildAuto1(balance2));
+      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
     } else if (autoDriveEnabled == 2) {
       auto = new SequentialCommandGroup(autoConeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 3) {
       auto = new SequentialCommandGroup(autoArmShooter, autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 4) {
-      auto = new SequentialCommandGroup(autoIntake, buildAuto1(straight));
+      auto = new SequentialCommandGroup(buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
     } else {
       auto = new SequentialCommandGroup(autoNothing);
     }

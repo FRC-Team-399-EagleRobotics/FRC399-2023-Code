@@ -50,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor1.config_IntegralZone(0, 0);
         armMotor1.configClosedLoopPeakOutput(0, 1);
         armMotor1.configAllowableClosedloopError(0, 0);
-        armMotor1.configMotionCruiseVelocity(14000, 0);
+        armMotor1.configMotionCruiseVelocity(11000, 0);
         armMotor1.configMotionAcceleration(22000, 0);
 
         armMotor2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
@@ -63,8 +63,8 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2.config_IntegralZone(0, 0);
         armMotor2.configClosedLoopPeakOutput(0, 1);
         armMotor2.configAllowableClosedloopError(0, 0);
-        armMotor2.configMotionCruiseVelocity(14000, 0);
-        armMotor2.configMotionAcceleration(22000, 0);
+        armMotor2.configMotionCruiseVelocity(11000, 0);
+        armMotor2.configMotionAcceleration(15000, 0);
 
         
 
@@ -148,9 +148,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void cubeHigh() {
-        int positionTicks = (int) (275 * encoderTicksPerDegree);
+        int positionTicks = (int) (260 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(20, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(28, CANSparkMax.ControlType.kPosition);
     }
 
     public void coneHigh() {
@@ -167,7 +167,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void coneMid() {
-        int positionTicks = (int) (275 * encoderTicksPerDegree);
+        int positionTicks = (int) (250 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
         m_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
     }
@@ -175,14 +175,14 @@ public class ArmSubsystem extends SubsystemBase {
     public void cubeLow() {
         int positionTicks = (int) (15 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(5, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(10, CANSparkMax.ControlType.kPosition);
 
     }
 
     public void coneLow() {
         int positionTicks = (int) (15 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(8, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(15, CANSparkMax.ControlType.kPosition);
     }
 
     public void cubeLowIntake() {
@@ -198,9 +198,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void cubeCharlesIntake() {
-        int positionTicks = (int) (70 * encoderTicksPerDegree);
+        int positionTicks = (int) (60 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(5, CANSparkMax.ControlType.kPosition);
     }
 
     public void coneCharlesIntake() {

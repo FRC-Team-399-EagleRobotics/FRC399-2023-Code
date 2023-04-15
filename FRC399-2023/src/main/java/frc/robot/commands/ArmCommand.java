@@ -65,6 +65,7 @@ public class ArmCommand extends CommandBase {
       m_arm.cubeLowIntake();
     } else if (RobotContainer.m_operator.getRawButton(9)) {
       m_arm.coneCharlesIntake();
+      lastStow = true;
     } else if (RobotContainer.m_operator.getRawButton(10)) {
       m_arm.cubeCharlesIntake(); 
       lastStow = true;

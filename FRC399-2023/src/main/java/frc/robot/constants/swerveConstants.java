@@ -135,7 +135,7 @@ public final class swerveConstants {
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
+    public static final double kPThetaController = -1.5;
 
     //public static HashMap<String, Command> eventMap = new HashMap<>();
 
