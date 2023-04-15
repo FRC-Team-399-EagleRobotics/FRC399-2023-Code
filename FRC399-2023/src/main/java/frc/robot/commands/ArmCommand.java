@@ -32,6 +32,8 @@ public class ArmCommand extends CommandBase {
   public void initialize() {
   }
 
+
+  boolean lastStow = false;
   // Called every time th scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -44,7 +46,7 @@ public class ArmCommand extends CommandBase {
     double kF = Math.sin(adjusted * -1);
 
     //m_arm.setKf(kF);
-
+    // Reserve buttons 7 8 9 for limelight
     if (RobotContainer.m_operator.getRawButton(1)) {
       m_arm.coneHigh();
     } else if (RobotContainer.m_operator.getRawButton(2)){
@@ -64,7 +66,16 @@ public class ArmCommand extends CommandBase {
     } else if (RobotContainer.m_operator.getRawButton(9)) {
       m_arm.coneCharlesIntake();
     } else if (RobotContainer.m_operator.getRawButton(10)) {
-      m_arm.stow();
+      m_arm.cubeCharlesIntake(); 
+      lastStow = true;
+    } else {
+
+      if(lastStow) {
+        m_arm.stow();
+        lastStow = false;
+      }
+
+
     }
   }
 

@@ -144,7 +144,8 @@ public class RobotContainer {
  
    ArrayList<PathPlannerTrajectory> straight = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("Holonomic Straight", new PathConstraints(2, 1.5));
    ArrayList<PathPlannerTrajectory> balance = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("kinda balance", new PathConstraints(1, 0.5));
-   ArrayList<PathPlannerTrajectory> shortPath = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("shortPath", new PathConstraints(1, 0.5));
+   ArrayList<PathPlannerTrajectory> balance2 = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("balance2", new PathConstraints(1, 0.5));
+   ArrayList<PathPlannerTrajectory> shortPath = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("ShortPath", new PathConstraints(1, 0.5));
 
 
   public static Command buildAuto1(List<PathPlannerTrajectory> trajs) {
@@ -163,6 +164,27 @@ public class RobotContainer {
       true,
       m_robotDrive
   );
+
+  return swerveAutoBuilder.fullAuto(trajs);}
+  
+
+  public static Command buildAuto2(List<PathPlannerTrajectory> trajs) {
+    //s_Swerve.resetOdometry(trajs.get(0).getInitialHolonomicPose());
+    HashMap<String, Command> eventMap = new HashMap<>();
+    eventMap.put("marker1", new PrintCommand("Hi"));
+    
+    swerveAutoBuilder = new SwerveAutoBuilder(
+        m_robotDrive::getPose,
+        m_robotDrive::resetOdometry,
+        DriveConstants.kDriveKinematics,
+        new PIDConstants(swerveConstants.AutoConstants.kPXController, 0, 0),
+        new PIDConstants(swerveConstants.AutoConstants.kPThetaController, 0, 0),
+        m_robotDrive::setModuleStates,
+        eventMap,
+        true,
+        m_robotDrive
+    );
+  
 
   return swerveAutoBuilder.fullAuto(trajs);
  // return SwerveAutoBuilder.fullAuto(traj);
@@ -186,7 +208,7 @@ public class RobotContainer {
     autoArmShooter autoArmShooter = new autoArmShooter(m_ArmSubsystem, 3);
     autoArmCubeHigh autoCubeHigh = new autoArmCubeHigh(m_ArmSubsystem, 3);
     autoArmConeHigh autoConeHigh = new autoArmConeHigh(m_ArmSubsystem, 3);
-    autoDoNothing autoNothing = new autoDoNothing(m_claw, 0);
+    autoDoNothing autoNothing = new autoDoNothing(m_claw, 2);
 
 
 // This is just an example event map. It would be better to have a constant, global event map
@@ -198,11 +220,11 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     SequentialCommandGroup auto;
     
-    int autoDriveEnabled = 2;
+    int autoDriveEnabled = 1;
     //boolean midAuto = false;
 
     if(autoDriveEnabled == 1) {
-      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(straight));
+      auto = new SequentialCommandGroup(/*autoCubeHigh, */buildAuto1(shortPath), /*autoIntake, autoArmStow, */buildAuto1(balance), autoNothing, buildAuto1(balance2));
     } else if (autoDriveEnabled == 2) {
       auto = new SequentialCommandGroup(autoConeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 3) {

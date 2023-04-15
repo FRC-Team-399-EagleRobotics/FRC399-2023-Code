@@ -50,6 +50,8 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor1.config_IntegralZone(0, 0);
         armMotor1.configClosedLoopPeakOutput(0, 1);
         armMotor1.configAllowableClosedloopError(0, 0);
+        armMotor1.configMotionCruiseVelocity(14000, 0);
+        armMotor1.configMotionAcceleration(22000, 0);
 
         armMotor2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         armMotor2.setSensorPhase(false);
@@ -61,6 +63,8 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2.config_IntegralZone(0, 0);
         armMotor2.configClosedLoopPeakOutput(0, 1);
         armMotor2.configAllowableClosedloopError(0, 0);
+        armMotor2.configMotionCruiseVelocity(14000, 0);
+        armMotor2.configMotionAcceleration(22000, 0);
 
         
 
@@ -77,7 +81,7 @@ public class ArmSubsystem extends SubsystemBase {
         // Motion Magic configuration
         armMotor1.configNominalOutputForward(0, Arm.kTimeoutMs);
 		armMotor1.configNominalOutputReverse(0, Arm.kTimeoutMs);
-		armMotor1.configPeakOutputForward(.80, Arm.kTimeoutMs);
+		armMotor1.configPeakOutputForward(0.75, Arm.kTimeoutMs);
 		armMotor1.configPeakOutputReverse(-0.30, Arm.kTimeoutMs);
         armMotor1.configMotionSCurveStrength(smoothing);
         armMotor1.setSelectedSensorPosition(0, 0, Arm.kTimeoutMs);
@@ -97,8 +101,8 @@ public class ArmSubsystem extends SubsystemBase {
         wrist_kD = 0; 
         wrist_kIz = 0;
         wrist_kFF = 0; 
-        wrist_kMaxOutput = .75; 
-        wrist_kMinOutput = -.75;
+        wrist_kMaxOutput = .50; 
+        wrist_kMinOutput = -.50;
 
 // 
         m_pidController.setP(-wrist_kP);
@@ -109,6 +113,10 @@ public class ArmSubsystem extends SubsystemBase {
         m_pidController.setOutputRange(wrist_kMinOutput, wrist_kMaxOutput);
         m_pidController.setFeedbackDevice(m_encoder);
         m_encoder.setPosition(0);
+        m_pidController.setSmartMotionMaxVelocity(2000, 0);
+        m_pidController.setSmartMotionMinOutputVelocity(0, 0);
+        m_pidController.setSmartMotionMaxAccel(1500, 0);
+        m_pidController.setSmartMotionAllowedClosedLoopError(1, 0);
     }
 
   // set PID vals for wristMotor
@@ -141,69 +149,69 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void cubeHigh() {
         int positionTicks = (int) (275 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(30, CANSparkMax.ControlType.kPosition);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(20, CANSparkMax.ControlType.kPosition);
     }
 
     public void coneHigh() {
         int positionTicks = (int) (290 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(35, CANSparkMax.ControlType.kPosition);
     }
 
 
     public void cubeMid() {
-        int positionTicks = (int) (80 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
+        int positionTicks = (int) (85 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(10, CANSparkMax.ControlType.kPosition);
     }
 
     public void coneMid() {
-        int positionTicks = (int) (260 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(30, CANSparkMax.ControlType.kPosition);
+        int positionTicks = (int) (275 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
     }
 
     public void cubeLow() {
         int positionTicks = (int) (15 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(9, CANSparkMax.ControlType.kPosition);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(5, CANSparkMax.ControlType.kPosition);
 
     }
 
     public void coneLow() {
         int positionTicks = (int) (15 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(15, CANSparkMax.ControlType.kPosition);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(8, CANSparkMax.ControlType.kPosition);
     }
 
     public void cubeLowIntake() {
-        int positionTicks = (int) (45 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(20, CANSparkMax.ControlType.kPosition);
+        int positionTicks = (int) (0 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(21, CANSparkMax.ControlType.kPosition);
     }
 
     public void coneLowIntake() {
-        int positionTicks = (int) (45 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(16.5, CANSparkMax.ControlType.kPosition);
+        int positionTicks = (int) (0 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(20, CANSparkMax.ControlType.kPosition);
     }
 
     public void cubeCharlesIntake() {
         int positionTicks = (int) (70 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
         m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
     public void coneCharlesIntake() {
         int positionTicks = (int) (0 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
-        m_pidController.setReference(16.5, CANSparkMax.ControlType.kPosition);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        m_pidController.setReference(10, CANSparkMax.ControlType.kPosition);
     }
 
     public void stow() {
-        int positionTicks = (int) (5 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.Position, positionTicks);
+        int positionTicks = (int) (0 * encoderTicksPerDegree);
+        armMotor1.set(ControlMode.MotionMagic, positionTicks);
         m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
