@@ -80,8 +80,8 @@ public class SwerveCommand extends CommandBase {
       
       // Else allow the driver full control to x, y, and steering(z) axis
     } else {
-      x = RobotContainer.m_driver.getRawAxis(1);
-      y = RobotContainer.m_driver.getRawAxis(0);
+      x = RobotContainer.m_driver.getRawAxis(1) * .1;
+      y = RobotContainer.m_driver.getRawAxis(0) * .1;
       if(RobotContainer.m_driver.getRawButton(1)) {
         steer = 0.02 * (AngleDifference(m_swerve.getHeading(), -90));
         if(Math.abs(steer) > .4) {

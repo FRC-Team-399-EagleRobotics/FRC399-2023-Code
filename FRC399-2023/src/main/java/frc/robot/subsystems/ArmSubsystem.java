@@ -51,7 +51,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor1.configClosedLoopPeakOutput(0, 1);
         armMotor1.configAllowableClosedloopError(0, 0);
         armMotor1.configMotionCruiseVelocity(11000, 0);
-        armMotor1.configMotionAcceleration(22000, 0);
+        armMotor1.configMotionAcceleration(11000, 0);
 
         armMotor2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         armMotor2.setSensorPhase(false);
@@ -64,7 +64,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2.configClosedLoopPeakOutput(0, 1);
         armMotor2.configAllowableClosedloopError(0, 0);
         armMotor2.configMotionCruiseVelocity(11000, 0);
-        armMotor2.configMotionAcceleration(15000, 0);
+        armMotor2.configMotionAcceleration(11000, 0);
 
         
 
@@ -156,7 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void coneHigh() {
         int positionTicks = (int) (290 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(35, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(36.5, CANSparkMax.ControlType.kPosition);
     }
 
 
@@ -188,7 +188,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void cubeLowIntake() {
         int positionTicks = (int) (0 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(21, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(19.5, CANSparkMax.ControlType.kPosition);
     }
 
     public void coneLowIntake() {
@@ -204,9 +204,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void coneCharlesIntake() {
-        int positionTicks = (int) (0 * encoderTicksPerDegree);
+        int positionTicks = (int) (45 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(10, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(13.5, CANSparkMax.ControlType.kPosition);
     }
 
     public void stow() {
