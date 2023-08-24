@@ -9,13 +9,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.autonomous.autoGripper;
-import frc.robot.autonomous.autoGripperIn;
 import frc.robot.autonomous.autoArmStow;
 import frc.robot.autonomous.autoDoNothing;
 import frc.robot.autonomous.autoArmConeHigh;
 //import frc.robot.autonomous.autoArmConeMid;
 import frc.robot.autonomous.autoArmCubeHigh;
-import frc.robot.autonomous.autoArmIntake;
 import frc.robot.autonomous.autoArmShooter;
 import frc.robot.autonomous.autoSetX;
 
@@ -146,10 +144,8 @@ public class RobotContainer {
   
  
    ArrayList<PathPlannerTrajectory> straight = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("Holonomic Straight", new PathConstraints(2, 1.5));
-   ArrayList<PathPlannerTrajectory> straightIntakeSmooth = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("StraightIntakeSmooth", new PathConstraints(1.25, 0.75));
-   ArrayList<PathPlannerTrajectory> straightIntakeBump = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("StraightIntakeBump", new PathConstraints(1.25, 0.75));
-   ArrayList<PathPlannerTrajectory> balance = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("kinda balance", new PathConstraints(1.25, 0.75));
-   ArrayList<PathPlannerTrajectory> balance2 = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("balance2", new PathConstraints(1.25, 0.75));
+   ArrayList<PathPlannerTrajectory> balance = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("kinda balance", new PathConstraints(1, 0.5));
+   ArrayList<PathPlannerTrajectory> balance2 = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("balance2", new PathConstraints(1, 0.5));
    ArrayList<PathPlannerTrajectory> shortPath = (ArrayList<PathPlannerTrajectory>) PathPlanner.loadPathGroup("ShortPath", new PathConstraints(1, 0.5));
 
 
@@ -208,13 +204,11 @@ public class RobotContainer {
         AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     */
-    autoGripper autoOuttake = new autoGripper(m_claw, 1);
-    autoGripperIn autoIntake = new autoGripperIn(m_claw, 1.5);
-    autoArmStow autoArmStow = new autoArmStow(m_ArmSubsystem, 0);
-    autoArmShooter autoArmShooter = new autoArmShooter(m_ArmSubsystem, 1);
-    autoArmCubeHigh autoCubeHigh = new autoArmCubeHigh(m_ArmSubsystem, 0);
-    autoArmConeHigh autoConeHigh = new autoArmConeHigh(m_ArmSubsystem, 0);
-    autoArmIntake autoLowIntake = new autoArmIntake(m_ArmSubsystem, 0);
+    autoGripper autoIntake = new autoGripper(m_claw, 1.5);
+    autoArmStow autoArmStow = new autoArmStow(m_ArmSubsystem, 2);
+    autoArmShooter autoArmShooter = new autoArmShooter(m_ArmSubsystem, 2);
+    autoArmCubeHigh autoCubeHigh = new autoArmCubeHigh(m_ArmSubsystem, 2);
+    autoArmConeHigh autoConeHigh = new autoArmConeHigh(m_ArmSubsystem, 2);
     autoDoNothing autoNothing = new autoDoNothing(m_claw, 2);
     autoSetX autoX = new autoSetX(m_robotDrive, 1);
 
@@ -228,17 +222,17 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     SequentialCommandGroup auto;
     
-    int autoDriveEnabled = 2;
+    int autoDriveEnabled = 4;
     //boolean midAuto = false;
 
     if(autoDriveEnabled == 1) {
-      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoOuttake, autoArmStow, buildAuto1(balance), buildAuto1(balance2), autoX);
+      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
     } else if (autoDriveEnabled == 2) {
-      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoOuttake, autoArmStow, buildAuto1(straight));
+      auto = new SequentialCommandGroup(autoConeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 3) {
-      auto = new SequentialCommandGroup(autoArmShooter, autoOuttake, autoArmStow, buildAuto1(straight));
+      auto = new SequentialCommandGroup(autoArmShooter, autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 4) {
-      auto = new SequentialCommandGroup(/*autoCubeHigh, buildAuto1(shortPath), autoOuttake, autoArmStow, */buildAuto1(straightIntakeBump) /*autoLowIntake, autoIntake, autoArmStow*/);
+      auto = new SequentialCommandGroup(buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
     } else {
       auto = new SequentialCommandGroup(autoNothing);
     }

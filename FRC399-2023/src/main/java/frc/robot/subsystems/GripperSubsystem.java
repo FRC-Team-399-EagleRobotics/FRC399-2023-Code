@@ -30,8 +30,6 @@ public class GripperSubsystem extends SubsystemBase {
     gripperMotor1.setNeutralMode(NeutralMode.Brake);
     gripperMotor2.setNeutralMode(NeutralMode.Brake);
 
-    gripperMotor1.configOpenloopRamp(.25);
-
   }
 
   @Override
