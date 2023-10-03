@@ -156,7 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void coneHigh() {
         int positionTicks = (int) (290 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(35, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(32, CANSparkMax.ControlType.kPosition);
     }
 
 
@@ -169,7 +169,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void coneMid() {
         int positionTicks = (int) (250 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(40, CANSparkMax.ControlType.kPosition);
+        m_pidController.setReference(356, CANSparkMax.ControlType.kPosition);
     }
 
     public void cubeLow() {

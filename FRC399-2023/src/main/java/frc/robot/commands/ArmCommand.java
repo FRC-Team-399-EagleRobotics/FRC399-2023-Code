@@ -76,7 +76,6 @@ public class ArmCommand extends CommandBase {
         lastStow = false;
       }
 
-
     }
   }
 
