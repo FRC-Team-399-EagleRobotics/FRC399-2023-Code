@@ -148,8 +148,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void cubeHigh() {
+        // Arm by degrees
         int positionTicks = (int) (260 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
+        // Wrist by motor position(aka rotations)
         m_pidController.setReference(28, CANSparkMax.ControlType.kPosition);
     }
 
@@ -167,9 +169,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void coneMid() {
+        // Arm by degrees
         int positionTicks = (int) (250 * encoderTicksPerDegree);
         armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(356, CANSparkMax.ControlType.kPosition);
+        // Wrist by motor position 
+        m_pidController.setReference(350, CANSparkMax.ControlType.kPosition); // Previous 356
     }
 
     public void cubeLow() {
