@@ -34,6 +34,7 @@ public class ArmCommand extends CommandBase {
 
 
   boolean lastStow = false;
+  boolean SmartDashboardControl = false;
   // Called every time th scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -67,13 +68,14 @@ public class ArmCommand extends CommandBase {
       m_arm.coneCharlesIntake();
       lastStow = true;
     } else if (RobotContainer.m_operator.getRawButton(10)) {
-      m_arm.cubeCharlesIntake(); 
-      lastStow = true;
+      SmartDashboardControl = true;
     } else {
 
       if(lastStow) {
         m_arm.stow();
         lastStow = false;
+      } else if(SmartDashboardControl) {
+         m_arm.smartDashboardControl();
       }
 
     }

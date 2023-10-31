@@ -20,14 +20,17 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmSubsystem extends SubsystemBase {
     private final TalonFX armMotor1, armMotor2;
-    private final CANSparkMax wristMotor;
-    private RelativeEncoder m_encoder;
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-    public double wrist_kP, wrist_kI, wrist_kD, wrist_kIz, wrist_kFF, wrist_kMaxOutput, wrist_kMinOutput;
+    
+    // Wrist
+    private CANSparkMax wristMotor;
     private SparkMaxPIDController m_pidController;
+    private RelativeEncoder m_encoder;
+    //public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+    public double wrist_kP, wrist_kI, wrist_kD, wrist_kIz, wrist_kFF, wrist_kMaxOutput, wrist_kMinOutput;
     double encoderTicksPerDegree;
 
     public ArmSubsystem() {
@@ -91,10 +94,11 @@ public class ArmSubsystem extends SubsystemBase {
         //armMotor1.configClosedloopRamp()
         armMotor2.follow(armMotor1);
 
+        wristMotor.restoreFactoryDefaults();
         m_pidController = wristMotor.getPIDController();
         m_encoder = wristMotor.getEncoder();
-        wristMotor.setIdleMode(IdleMode.kBrake);
-
+        //wristMotor.setIdleMode(IdleMode.kBrake);
+/* Old champ code 
 // PID coefficients for the wrist 
         wrist_kP = 0.1;
         wrist_kI = 0;
@@ -104,7 +108,7 @@ public class ArmSubsystem extends SubsystemBase {
         wrist_kMaxOutput = .50; 
         wrist_kMinOutput = -.50;
 
-// 
+        wristMotor.restoreFactoryDefaults();
         m_pidController.setP(-wrist_kP);
         m_pidController.setI(wrist_kI);
         m_pidController.setD(wrist_kD);
@@ -117,10 +121,78 @@ public class ArmSubsystem extends SubsystemBase {
         m_pidController.setSmartMotionMinOutputVelocity(0, 0);
         m_pidController.setSmartMotionMaxAccel(1500, 0);
         m_pidController.setSmartMotionAllowedClosedLoopError(1, 0);
+        wristMotor.burnFlash();
+*/
+        // PID coefficients
+        wrist_kP = 0.1; 
+        wrist_kI = 1e-4;
+        wrist_kD = 1; 
+        wrist_kIz = 0; 
+        wrist_kFF = 0; 
+        wrist_kMaxOutput = 1; 
+        wrist_kMinOutput = -1;
+
+    // set PID coefficients
+    m_pidController.setP(wrist_kP);
+    m_pidController.setI(wrist_kI);
+    m_pidController.setD(wrist_kD);
+    m_pidController.setIZone(wrist_kIz);
+    m_pidController.setFF(wrist_kFF);
+    m_pidController.setOutputRange(wrist_kMinOutput, wrist_kMaxOutput);
+
+        // display PID coefficients on SmartDashboard
+        SmartDashboard.putNumber("P Gain", wrist_kP);
+        SmartDashboard.putNumber("I Gain", wrist_kI);
+        SmartDashboard.putNumber("D Gain", wrist_kD);
+        SmartDashboard.putNumber("I Zone", wrist_kIz);
+        SmartDashboard.putNumber("Feed Forward", wrist_kFF);
+        SmartDashboard.putNumber("Max Output", wrist_kMaxOutput);
+        SmartDashboard.putNumber("Min Output", wrist_kMinOutput);
+        SmartDashboard.putNumber("Set Rotations", 0);
     }
 
-  // set PID vals for wristMotor
+    // Smart dashboard control best to test if the wrist is even working
+    public void smartDashboardControl() {
+        // read PID coefficients from SmartDashboard
+        double p = SmartDashboard.getNumber("P Gain", 0);
+        double i = SmartDashboard.getNumber("I Gain", 0);
+        double d = SmartDashboard.getNumber("D Gain", 0);
+        double iz = SmartDashboard.getNumber("I Zone", 0);
+        double ff = SmartDashboard.getNumber("Feed Forward", 0);
+        double max = SmartDashboard.getNumber("Max Output", 0);
+        double min = SmartDashboard.getNumber("Min Output", 0);
+        double rotations = SmartDashboard.getNumber("Set Rotations", 0);
 
+        // if PID coefficients on SmartDashboard have changed, write new values to controller
+        if((p != wrist_kP)) { m_pidController.setP(p); wrist_kP = p; }
+        if((i != wrist_kI)) { m_pidController.setI(i); wrist_kI = i; }
+        if((d != wrist_kD)) { m_pidController.setD(d); wrist_kD = d; }
+        if((iz != wrist_kIz)) { m_pidController.setIZone(iz); wrist_kIz = iz; }
+        if((ff != wrist_kFF)) { m_pidController.setFF(ff); wrist_kFF = ff; }
+        if((max != wrist_kMaxOutput) || (min != wrist_kMinOutput)) { 
+            m_pidController.setOutputRange(min, max); 
+            wrist_kMinOutput = min; wrist_kMaxOutput = max;
+        }
+
+        /**
+         * PIDController objects are commanded to a set point using the 
+         * SetReference() method.
+         * 
+         * The first parameter is the value of the set point, whose units vary
+         * depending on the control type set in the second parameter.
+         * 
+         * The second parameter is the control type can be set to one of four 
+         * parameters:
+         *  com.revrobotics.CANSparkMax.ControlType.kDutyCycle
+         *  com.revrobotics.CANSparkMax.ControlType.kPosition
+         *  com.revrobotics.CANSparkMax.ControlType.kVelocity
+         *  com.revrobotics.CANSparkMax.ControlType.kVoltage
+         */
+        m_pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+
+        SmartDashboard.putNumber("SetPoint", rotations);
+        SmartDashboard.putNumber("ProcessVariable", m_encoder.getPosition());
+    }
     public void setPosition(double positionDegrees) {
         // Convert the position in degrees to encoder ticks
         int positionTicks = (int) (270 * encoderTicksPerDegree);
