@@ -1,29 +1,23 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import frc.robot.constants.Constants.Arm;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants.Arm;
 
 public class ArmSubsystem extends SubsystemBase {
-    private final TalonFX armMotor1, armMotor2;
-    private final CANSparkMax wristMotor;
+    private TalonFX armMotor1, armMotor2;
+    private CANSparkMax wristMotor;
     private RelativeEncoder m_encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
     public double wrist_kP, wrist_kI, wrist_kD, wrist_kIz, wrist_kFF, wrist_kMaxOutput, wrist_kMinOutput;
@@ -31,14 +25,23 @@ public class ArmSubsystem extends SubsystemBase {
     double encoderTicksPerDegree;
 
     public ArmSubsystem() {
-        armMotor1 = new TalonFX(Arm.armMotor1_ID);
-        armMotor2 = new TalonFX(Arm.armMotor2_ID);
-        wristMotor = new CANSparkMax(Arm.wristMotor, MotorType.kBrushless);
 
+        configShoulder();
+        configWrist();
+        
         this.encoderTicksPerDegree = 227.56;
 
-        int smoothing = 1;
+       
+    }
+
+    private void configShoulder() {
+
+        // initialize shoulder motors at IDs
+        armMotor1 = new TalonFX(Arm.armMotor1_ID);
+        armMotor2 = new TalonFX(Arm.armMotor2_ID);
         
+        int smoothing = 1;
+
         // Configure the Talon FX for position control
         armMotor1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         armMotor1.setSensorPhase(false);
@@ -66,8 +69,6 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2.configMotionCruiseVelocity(11000, 0);
         armMotor2.configMotionAcceleration(15000, 0);
 
-        
-
         // Current limiting & break mode
         armMotor1.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,35, 40, 1.0));
         armMotor1.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,35, 40, 0.5));
@@ -77,7 +78,6 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true,35, 40, 0.5));
         armMotor2.setNeutralMode(NeutralMode.Brake);
     
-
         // Motion Magic configuration
         armMotor1.configNominalOutputForward(0, Arm.kTimeoutMs);
 		armMotor1.configNominalOutputReverse(0, Arm.kTimeoutMs);
@@ -86,16 +86,23 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor1.configMotionSCurveStrength(smoothing);
         armMotor1.setSelectedSensorPosition(0, 0, Arm.kTimeoutMs);
 
-    
-
+        // Configure motor 2 to follow 1
         //armMotor1.configClosedloopRamp()
         armMotor2.follow(armMotor1);
 
+    }
+
+    private void configWrist() {    
+        // Initialize wrist motor at ID, config for brushless mode
+        wristMotor = new CANSparkMax(Arm.wristMotor, MotorType.kBrushless); 
+        wristMotor.restoreFactoryDefaults();
+
+        // Configure pid controller
         m_pidController = wristMotor.getPIDController();
         m_encoder = wristMotor.getEncoder();
         wristMotor.setIdleMode(IdleMode.kBrake);
 
-//PID coefficients for the wrist 
+        //PID coefficients for the wrist 
         wrist_kP = 0.1;
         wrist_kI = 0;
         wrist_kD = 0; 
@@ -103,7 +110,6 @@ public class ArmSubsystem extends SubsystemBase {
         wrist_kFF = 0; 
         wrist_kMaxOutput = .50; 
         wrist_kMinOutput = -.50;
-
 
         m_pidController.setP(-wrist_kP);
         m_pidController.setI(wrist_kI);
@@ -119,100 +125,102 @@ public class ArmSubsystem extends SubsystemBase {
         m_pidController.setSmartMotionAllowedClosedLoopError(1, 0);
     }
 
-  // set PID vals for wristMotor
-
-    public void setPosition(double positionDegrees) {
-        // Convert the position in degrees to encoder ticks
-        int positionTicks = (int) (270 * encoderTicksPerDegree);
-        m_pidController.setReference(positionTicks, CANSparkMax.ControlType.kPosition);
+    public static enum PositionState {
+        CUBE_LOW,
+        CUBE_MID,
+        CUBE_HIGH,
         
+        CONE_LOW,
+        CONE_MID,
+        CONE_HIGH,
 
-        // Set the position setpoint for the ArmMotor1 FX
-        armMotor1.set(ControlMode.Position, positionTicks);
+        CUBE_HP,
+        CUBE_FLOOR,
+        CONE_HP,
+        CONE_FLOOR,
+
+        STOW
+    }
+
+    public void setState(ArmSubsystem.PositionState state) {
+        double shoulder = 0, wrist = 0;
+        switch(state) {
+            // Stow states - robot fully folded
+            case STOW:
+                shoulder = 0;
+                wrist = 0;
+                break;
+
+            // cube scoring states
+            case CUBE_LOW:
+                shoulder = 15;
+                wrist = 10;
+                break;
+            case CUBE_MID:
+                shoulder = 85;
+                wrist = 10;
+                break;
+            case CUBE_HIGH:
+                shoulder = 260;
+                wrist = 28;
+                break;
+
+            // cone scoring states
+            case CONE_LOW:
+                shoulder = 15;
+                wrist = 15;
+                break;
+            case CONE_MID:
+                shoulder = 250;
+                wrist = 356;
+                break;
+            case CONE_HIGH:
+                shoulder = 290;
+                wrist = 32;
+                break;
+
+            // game piece loading states
+            case CONE_HP:
+                shoulder = 0;
+                wrist = 10;
+                break;
+            case CONE_FLOOR:
+                shoulder = 0;
+                wrist = 20;
+                break;
+            case CUBE_HP:
+                shoulder = 60;
+                wrist = 5;
+                break;
+            case CUBE_FLOOR:
+                shoulder = 0;
+                wrist = 21;
+                break;
+
+            // if fed an invalid state, stow the arm
+            default:
+                shoulder = 0;
+                wrist = 0;
+                break;
+        }
+
+        // write positions to motor controllers. 
+        setPosition(shoulder, wrist);
+
+    }
+
+    private void setPosition(double shoulder, double wrist) {
+        // set shoulder position, convert to encoder ticks. 
+        armMotor1.set(ControlMode.MotionMagic, (int) (shoulder * encoderTicksPerDegree));
+
+        // set wrist position
+        m_pidController.setReference(wrist, CANSparkMax.ControlType.kPosition);
     }
 
     public double getAngle() {
        double angle = armMotor1.getSelectedSensorPosition();
 
         return angle;
-    }
-
-    public void setKf(double kF) {
-        armMotor1.config_kF(0, kF);
-        
-    }
-
-    public void motionMagicTest() {
-        int positionTicks = (int) (60 * encoderTicksPerDegree);
-        armMotor1.set(TalonFXControlMode.MotionMagic, positionTicks);
-    }
-
-    public void cubeHigh() {
-        int positionTicks = (int) (260 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(28, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void coneHigh() {
-        int positionTicks = (int) (290 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(32, CANSparkMax.ControlType.kPosition);
-    }
-
-
-    public void cubeMid() {
-        int positionTicks = (int) (85 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(10, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void coneMid() {
-        int positionTicks = (int) (250 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(356, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void cubeLow() {
-        int positionTicks = (int) (15 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(10, CANSparkMax.ControlType.kPosition);
-
-    }
-
-    public void coneLow() {
-        int positionTicks = (int) (15 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(15, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void cubeLowIntake() {
-        int positionTicks = (int) (0 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(21, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void coneLowIntake() {
-        int positionTicks = (int) (0 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(20, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void cubeCharlesIntake() {
-        int positionTicks = (int) (60 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(5, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void coneCharlesIntake() {
-        int positionTicks = (int) (0 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(10, CANSparkMax.ControlType.kPosition);
-    }
-
-    public void stow() {
-        int positionTicks = (int) (0 * encoderTicksPerDegree);
-        armMotor1.set(ControlMode.MotionMagic, positionTicks);
-        m_pidController.setReference(0, CANSparkMax.ControlType.kPosition);
     }
 
     public void manual(double i) {

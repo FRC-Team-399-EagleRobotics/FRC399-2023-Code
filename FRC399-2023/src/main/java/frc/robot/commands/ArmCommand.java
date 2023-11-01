@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.PositionState;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Constants;
@@ -48,31 +49,31 @@ public class ArmCommand extends CommandBase {
     //m_arm.setKf(kF);
     // Reserve buttons 7 8 9 for limelight
     if (RobotContainer.m_operator.getRawButton(1)) {
-      m_arm.coneHigh();
+      m_arm.setState(PositionState.CONE_HIGH);
     } else if (RobotContainer.m_operator.getRawButton(2)){
-      m_arm.cubeHigh();
+      m_arm.setState(PositionState.CUBE_HIGH);
     } else if (RobotContainer.m_operator.getRawButton(3)) {
-      m_arm.coneMid();
+      m_arm.setState(PositionState.CONE_MID);
     } else if (RobotContainer.m_operator.getRawButton(4)){
-      m_arm.cubeMid();
+      m_arm.setState(PositionState.CUBE_MID);
     } else if (RobotContainer.m_operator.getRawButton(5)){
-      m_arm.coneLow();
+      m_arm.setState(PositionState.CONE_LOW);
     } else if (RobotContainer.m_operator.getRawButton(6)) {
-      m_arm.cubeLow();
+      m_arm.setState(PositionState.CUBE_LOW);
     } else if (RobotContainer.m_operator.getRawButton(7)) {
-      m_arm.coneLowIntake();
+      m_arm.setState(PositionState.CONE_FLOOR);
     } else if (RobotContainer.m_operator.getRawButton(8)) {
-      m_arm.cubeLowIntake();
+      m_arm.setState(PositionState.CUBE_FLOOR);
     } else if (RobotContainer.m_operator.getRawButton(9)) {
-      m_arm.coneCharlesIntake();
+      m_arm.setState(PositionState.CONE_HP);
       lastStow = true;
     } else if (RobotContainer.m_operator.getRawButton(10)) {
-      m_arm.cubeCharlesIntake(); 
+      m_arm.setState(PositionState.CUBE_HP);
       lastStow = true;
     } else {
 
       if(lastStow) {
-        m_arm.stow();
+        m_arm.setState(PositionState.STOW);
         lastStow = false;
       }
 
