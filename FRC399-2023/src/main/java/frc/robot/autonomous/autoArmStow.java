@@ -1,8 +1,9 @@
 package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
-import edu.wpi.first.wpilibj2.command.CommandBase; 
+import frc.robot.subsystems.ArmSubsystem.PositionState; 
 
 public class autoArmStow extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -29,17 +30,18 @@ public class autoArmStow extends CommandBase {
       public void execute() { // TODO Don't need true or false out take and intake
         if (timer.get() < t) {
         {
-            m_aArmM.stow();
+            
+          m_aArmM.setState(PositionState.STOW);
         }
         }else{
-            m_aArmM.stow();
+          m_aArmM.setState(PositionState.STOW);
             isFinished = true;
         }
       }
       @Override
       public void end(boolean interrupted)
       {
-        m_aArmM.stow();
+        m_aArmM.setState(PositionState.STOW);
       }
 
       @Override

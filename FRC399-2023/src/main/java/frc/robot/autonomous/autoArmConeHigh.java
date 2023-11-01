@@ -2,6 +2,7 @@ package frc.robot.autonomous;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.PositionState;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
 public class autoArmConeHigh extends CommandBase {
@@ -29,17 +30,17 @@ public class autoArmConeHigh extends CommandBase {
       public void execute() { // TODO Don't need true or false out take and intake
         if (timer.get() < t) {
         {
-            m_aArmS.coneHigh();
+            m_aArmS.setState(PositionState.CONE_HIGH);
         }
         }else{
-            m_aArmS.coneHigh();
+          m_aArmS.setState(PositionState.CONE_HIGH);
             isFinished = true;
         }
       }
       @Override
       public void end(boolean interrupted)
       {
-        m_aArmS.coneHigh();
+        m_aArmS.setState(PositionState.CONE_HIGH);
       }
 
       @Override
