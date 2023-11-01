@@ -68,16 +68,19 @@ public class ArmCommand extends CommandBase {
       m_arm.coneCharlesIntake();
       lastStow = true;
     } else if (RobotContainer.m_operator.getRawButton(10)) {
-      SmartDashboardControl = true;
+      m_arm.cubeCharlesIntake();
+      lastStow = true;
+      //SmartDashboardControl = true;
     } else {
 
       if(lastStow) {
         m_arm.stow();
         lastStow = false;
+      /*
       } else if(SmartDashboardControl) {
-         m_arm.smartDashboardControl();
+         m_arm.smartDashboardControl();4
+       */
       }
-
     }
   }
 

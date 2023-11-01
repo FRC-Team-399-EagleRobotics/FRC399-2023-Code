@@ -97,7 +97,7 @@ public class ArmSubsystem extends SubsystemBase {
         wristMotor.restoreFactoryDefaults();
         m_pidController = wristMotor.getPIDController();
         m_encoder = wristMotor.getEncoder();
-        //wristMotor.setIdleMode(IdleMode.kBrake);
+        wristMotor.setIdleMode(IdleMode.kBrake);
 /* Old champ code 
 // PID coefficients for the wrist 
         wrist_kP = 0.1;
@@ -125,12 +125,12 @@ public class ArmSubsystem extends SubsystemBase {
 */
         // PID coefficients
         wrist_kP = 0.1; 
-        wrist_kI = 1e-4;
+        wrist_kI = 0;//1e-4;
         wrist_kD = 1; 
         wrist_kIz = 0; 
         wrist_kFF = 0; 
-        wrist_kMaxOutput = 1; 
-        wrist_kMinOutput = -1;
+        wrist_kMaxOutput = .50;//1; 
+        wrist_kMinOutput = -.50;//-1;
 
     // set PID coefficients
     m_pidController.setP(wrist_kP);
