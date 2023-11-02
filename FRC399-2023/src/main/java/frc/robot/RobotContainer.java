@@ -83,8 +83,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // Arm 
-  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-  private final ArmCommand m_armCommand = new ArmCommand(m_ArmSubsystem);
+  public ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  private ArmCommand m_armCommand = new ArmCommand(m_ArmSubsystem);
 
   // The Swerve subsystem
   public static DriveSubsystem m_robotDrive = new DriveSubsystem();
