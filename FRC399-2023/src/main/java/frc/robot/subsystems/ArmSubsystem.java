@@ -223,6 +223,7 @@ public class ArmSubsystem extends SubsystemBase {
         return angle;
     }
 
+
     public void printAngles() {
         System.out.println("S: " + armMotor1.getSelectedSensorPosition() + "\tW: " + m_encoder.getPosition());
     }
