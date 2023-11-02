@@ -5,6 +5,11 @@
         "header": {
           "open": true
         }
+      },
+      "SPARK MAX [7]": {
+        "header": {
+          "open": true
+        }
       }
     },
     "Timing": {
@@ -19,6 +24,9 @@
     }
   },
   "NetworkTables": {
+    "Transitory Values": {
+      "open": false
+    },
     "transitory": {
       "FMSInfo": {
         "open": true
@@ -26,6 +34,15 @@
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "open": true
+    },
     "visible": true
   }
 }

@@ -9,6 +9,8 @@ import frc.robot.constants.Constants.Arm;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.revrobotics.RelativeEncoder;
@@ -97,6 +99,9 @@ public class ArmSubsystem extends SubsystemBase {
         wristMotor.restoreFactoryDefaults();
         m_pidController = wristMotor.getPIDController();
         m_encoder = wristMotor.getEncoder();
+
+        // Simulation
+        //private EncoderSim m_encoderSim = new EncoderSim(m_encoder);
         //wristMotor.setIdleMode(IdleMode.kBrake);
 /* Old champ code 
 // PID coefficients for the wrist 
