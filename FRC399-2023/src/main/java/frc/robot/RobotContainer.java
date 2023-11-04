@@ -232,7 +232,7 @@ public class RobotContainer {
     } else if (autoDriveEnabled == 3) {
       auto = new SequentialCommandGroup(autoArmShooter, autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 4) {
-      auto = new SequentialCommandGroup(buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
+      auto = new SequentialCommandGroup(autoCubeHigh,buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
     } else {
       auto = new SequentialCommandGroup(autoNothing);
     }

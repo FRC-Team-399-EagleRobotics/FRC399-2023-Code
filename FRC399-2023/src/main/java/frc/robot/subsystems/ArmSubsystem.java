@@ -96,6 +96,8 @@ public class ArmSubsystem extends SubsystemBase {
         // Initialize wrist motor at ID, config for brushless mode
         wristMotor = new CANSparkMax(Arm.wristMotor, MotorType.kBrushless); 
         wristMotor.restoreFactoryDefaults();
+        //wristMotor.setSmartCurrentLimit(10);
+        
 
         // Configure pid controller
         m_pidController = wristMotor.getPIDController();
@@ -104,14 +106,14 @@ public class ArmSubsystem extends SubsystemBase {
 
         //PID coefficients for the wrist 
         wrist_kP = 0.1;
-        wrist_kI = 0;
-        wrist_kD = 0; 
-        wrist_kIz = 0;
+        wrist_kI = 1e-4;
+        wrist_kD = 1; 
+        wrist_kIz = 0.00;
         wrist_kFF = 0; 
         wrist_kMaxOutput = .50; 
         wrist_kMinOutput = -.50;
 
-        m_pidController.setP(-wrist_kP);
+        m_pidController.setP(wrist_kP);
         m_pidController.setI(wrist_kI);
         m_pidController.setD(wrist_kD);
         m_pidController.setIZone(wrist_kIz);
@@ -123,6 +125,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_pidController.setSmartMotionMinOutputVelocity(0, 0);
         m_pidController.setSmartMotionMaxAccel(1500, 0);
         m_pidController.setSmartMotionAllowedClosedLoopError(1, 0);
+
+        wristMotor.burnFlash();
     }
 
     public static enum PositionState {
@@ -148,7 +152,7 @@ public class ArmSubsystem extends SubsystemBase {
             // Stow states - robot fully folded
             case STOW:
                 shoulder = 0;
-                wrist = 0;
+                wrist = 1.5;
                 break;
 
             // cube scoring states
@@ -194,7 +198,7 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case CUBE_FLOOR:
                 shoulder = 0;
-                wrist = 21;
+                wrist = 18;
                 break;
 
             // if fed an invalid state, stow the arm
