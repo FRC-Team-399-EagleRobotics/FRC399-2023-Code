@@ -49,7 +49,7 @@ public class SwerveCommand extends CommandBase {
     boolean center = RobotContainer.m_driver.getRawButton(5); 
     boolean right = RobotContainer.m_driver.getRawButton(6); 
 
-    boolean autoDrive = left|| center || right;
+    boolean autoDrive = false;//left|| center || right;
     double steer = 0;
     //System.out.println(m_swerve.getHeading());
     if(autoDrive) {
@@ -80,8 +80,14 @@ public class SwerveCommand extends CommandBase {
       
       // Else allow the driver full control to x, y, and steering(z) axis
     } else {
-      x = RobotContainer.m_driver.getRawAxis(1)*.4;
-      y = RobotContainer.m_driver.getRawAxis(0)*.4;
+
+      double scale = 0.6;
+
+      if(RobotContainer.m_driver.getRawButton(8)) {
+        scale = 1.0;
+      }
+      x = RobotContainer.m_driver.getRawAxis(1)*scale;
+      y = RobotContainer.m_driver.getRawAxis(0)*scale;
 
 
       if(RobotContainer.m_driver.getRawButton(1)) {

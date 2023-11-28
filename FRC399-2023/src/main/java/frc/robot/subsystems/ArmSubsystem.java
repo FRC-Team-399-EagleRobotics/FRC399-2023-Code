@@ -198,7 +198,7 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case CUBE_FLOOR:
                 shoulder = 0;
-                wrist = 18;
+                wrist = 20;
                 break;
 
             // if fed an invalid state, stow the arm

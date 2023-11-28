@@ -222,17 +222,20 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     SequentialCommandGroup auto;
     
-    int autoDriveEnabled = 4;
+    int autoDriveEnabled = 2;
     //boolean midAuto = false;
 
+    // At bump
     if(autoDriveEnabled == 1) {
-      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
+      //auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
+      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, autoX);
+    // sides
     } else if (autoDriveEnabled == 2) {
-      auto = new SequentialCommandGroup(autoConeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(straight));
+      auto = new SequentialCommandGroup(autoCubeHigh, buildAuto1(shortPath), autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 3) {
       auto = new SequentialCommandGroup(autoArmShooter, autoIntake, autoArmStow, buildAuto1(straight));
     } else if (autoDriveEnabled == 4) {
-      auto = new SequentialCommandGroup(autoCubeHigh,buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
+      auto = new SequentialCommandGroup(buildAuto1(balance), autoNothing, buildAuto1(balance2), autoX);
     } else {
       auto = new SequentialCommandGroup(autoNothing);
     }
